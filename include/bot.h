@@ -8,6 +8,7 @@
 class Bot {
 public:
     Move getBestMove(Board& board);
+    Move getBestMoveThreaded(Board& board);
 
 private:
     int minMax(Board& board, bool isMaximizing);

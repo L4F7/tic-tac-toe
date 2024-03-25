@@ -1,0 +1,14 @@
+{
+    "files.associations": {
+        "compare": "cpp",
+        "concepts": "cpp",
+        "cstdint": "cpp",
+        "ctime": "cpp",
+        "ratio": "cpp",
+        "type_traits": "cpp",
+        "limits": "cpp",
+        "*.tcc": "cpp",
+        "deque": "cpp",
+        "vector": "cpp"
+    }
+}

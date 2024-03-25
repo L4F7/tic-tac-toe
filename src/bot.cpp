@@ -1,6 +1,7 @@
 #include <vector>
 #include <algorithm>
 #include <iostream>
+#include <thread>
 
 #include "bot.h"
 #include "board.h"
@@ -23,6 +24,34 @@ Move Bot::getBestMove(Board & board) {
             bestMove = move;
         }
     }
+    return bestMove;
+}
+
+Move Bot::getBestMoveThreaded(Board & board) {
+    std::vector<Move> availableMoves = board.getAvailableMoves();
+
+    if (availableMoves.size() < 5) return getBestMove(board);
+
+    int bestScore = -1000;
+    Move bestMove;
+    std::vector<std::thread> threads;
+
+    for (const auto & move : availableMoves) {
+        threads.emplace_back([&]() {
+            Board tempBoard(board); // Create a temporary board for each thread
+            tempBoard.placeMove(move.row, move.col, PLAYER_O);
+            int score = minMax(tempBoard, false);
+            if (score > bestScore) {
+                bestScore = score;
+                bestMove = move;
+            }
+        });
+    }
+
+    for (auto & thread : threads) {
+        thread.join(); // Wait for all threads to finish
+    }
+
     return bestMove;
 }
 

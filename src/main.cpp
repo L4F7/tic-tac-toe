@@ -44,19 +44,18 @@ int main() {
         } else {
             std::cout << "\nBot's turn..." << std::endl;
 
+            // auto start = std::chrono::high_resolution_clock::now();
+            // Move botMove = bot.getBestMove(board);
+            // auto stop = std::chrono::high_resolution_clock::now();
+
             auto start = std::chrono::high_resolution_clock::now();
-            Move botMove = bot.getBestMove(board);
+            Move botMove = bot.getBestMoveThreaded(board);
             auto stop = std::chrono::high_resolution_clock::now();
 
-            auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(stop - start);
+            auto duration = std::chrono::duration_cast<std::chrono::microseconds>(stop - start);
+
+            std::cout << "Execution time: " << duration.count() << " microseconds" << std::endl;
             executionTimes.push_back(duration.count());
-
-            // auto start = high_resolution_clock::now();
-            // Move botMove = bot.getBestMoveThreaded(board);
-            // auto stop = high_resolution_clock::now();
-
-            // auto duration = duration_cast<nanoseconds>(stop - start);
-            // executionTimes.push_back(duration.count());
 
             board.placeMove(botMove.row, botMove.col, PLAYER_O);
             currentPlayer = PLAYER_X;
@@ -79,7 +78,7 @@ int main() {
 
     std::cout << "\nExecution times: \n" << std::endl;
     for(auto time: executionTimes) {
-        std::cout << "Execution time: " << time << " nanoseconds" << std::endl;
+        std::cout << "Execution time: " << time << " microseconds" << std::endl;
     }
 
     return 0;
