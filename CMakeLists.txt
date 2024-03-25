@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.10)
-project(MyCppProject)
+project(Tic-Tac-Toe)
 
 # Specify the include directory
 include_directories(${CMAKE_SOURCE_DIR}/include)
@@ -12,4 +12,4 @@ set(SOURCES
 )
 
 # Create executable from sources
-add_executable(my_cpp_executable ${SOURCES})
+add_executable(tic-tac-toe ${SOURCES})
