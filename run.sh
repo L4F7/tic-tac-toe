@@ -1,5 +1,5 @@
 #!/usr/bin/bash
 
-cmake --build ./build
-
-./build/tic-tac-toe -fopenmp
+mkdir -p build && cd build
+cmake .. && make
+./tic-tac-toe
