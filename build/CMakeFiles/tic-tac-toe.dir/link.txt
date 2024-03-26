@@ -1,1 +1,0 @@
-/usr/bin/c++ "CMakeFiles/tic-tac-toe.dir/src/main.cpp.o" "CMakeFiles/tic-tac-toe.dir/src/board.cpp.o" "CMakeFiles/tic-tac-toe.dir/src/bot.cpp.o" "CMakeFiles/tic-tac-toe.dir/src/game.cpp.o" "CMakeFiles/tic-tac-toe.dir/src/interface.cpp.o" -o tic-tac-toe 
