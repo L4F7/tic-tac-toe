@@ -9,7 +9,11 @@ int main() {
         Game game;
         int option = interface.displayMenu();
         if (option == 1) game.playerVsPlayer();
-        if (option == 2) game.playerVsBot(interface.displayBotMode());
+        if (option == 2) {
+            int mode = interface.displayBotMode();
+            if (mode == 3) continue;
+            game.playerVsBot(mode);
+        };
         if (option == 3) interface.displayCredits();
         if (option == 4) break;
     }
