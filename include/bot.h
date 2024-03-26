@@ -2,16 +2,22 @@
 #define BOT_H
 
 #include "board.h"
-
 #include "move.h" 
 
 class Bot {
+
 public:
+    void setMode(int mode);
+    int getMode();
+
     Move getBestMove(Board& board);
+    Move getBestMoveNonThreaded(Board& board);
     Move getBestMoveThreaded(Board& board);
 
 private:
+    int mode = 0;
     int minMax(Board& board, bool isMaximizing);
+    
 };
 
 #endif // BOT_H

@@ -1,7 +1,6 @@
 CMakeFiles/tic-tac-toe.dir/src/board.cpp.o: \
- /home/l4f7/paralelas/tic-tac-toe/src/board.cpp \
- /usr/include/stdc-predef.h /usr/include/c++/13/iostream \
- /usr/include/c++/13/bits/requires_hosted.h \
+ /home/l4f7/tic-tac-toe/src/board.cpp /usr/include/stdc-predef.h \
+ /usr/include/c++/13/iostream /usr/include/c++/13/bits/requires_hosted.h \
  /usr/include/x86_64-linux-gnu/c++/13/bits/c++config.h \
  /usr/include/x86_64-linux-gnu/c++/13/bits/os_defines.h \
  /usr/include/features.h /usr/include/features-time64.h \
@@ -150,10 +149,10 @@ CMakeFiles/tic-tac-toe.dir/src/board.cpp.o: \
  /usr/include/c++/13/bits/basic_ios.tcc \
  /usr/include/c++/13/bits/ostream.tcc /usr/include/c++/13/istream \
  /usr/include/c++/13/bits/istream.tcc \
- /home/l4f7/paralelas/tic-tac-toe/include/board.h \
- /usr/include/c++/13/vector /usr/include/c++/13/bits/stl_uninitialized.h \
+ /home/l4f7/tic-tac-toe/include/board.h /usr/include/c++/13/vector \
+ /usr/include/c++/13/bits/stl_uninitialized.h \
  /usr/include/c++/13/bits/stl_vector.h \
  /usr/include/c++/13/bits/stl_bvector.h \
  /usr/include/c++/13/bits/vector.tcc \
- /home/l4f7/paralelas/tic-tac-toe/include/move.h \
- /home/l4f7/paralelas/tic-tac-toe/include/move.h
+ /home/l4f7/tic-tac-toe/include/move.h \
+ /home/l4f7/tic-tac-toe/include/move.h

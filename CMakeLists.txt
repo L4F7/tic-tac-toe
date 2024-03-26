@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.10)
+cmake_minimum_required(VERSION 3.20)
 project(Tic-Tac-Toe)
 
 # Specify the include directory
@@ -9,6 +9,8 @@ set(SOURCES
     src/main.cpp
     src/board.cpp
     src/bot.cpp
+    src/game.cpp
+    src/interface.cpp
 )
 
 # Create executable from sources

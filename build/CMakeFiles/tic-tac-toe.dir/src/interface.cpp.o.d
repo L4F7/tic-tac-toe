@@ -1,5 +1,5 @@
-CMakeFiles/tic-tac-toe.dir/src/main.cpp.o: \
- /home/l4f7/tic-tac-toe/src/main.cpp /usr/include/stdc-predef.h \
+CMakeFiles/tic-tac-toe.dir/src/interface.cpp.o: \
+ /home/l4f7/tic-tac-toe/src/interface.cpp /usr/include/stdc-predef.h \
  /usr/include/c++/13/iostream /usr/include/c++/13/bits/requires_hosted.h \
  /usr/include/x86_64-linux-gnu/c++/13/bits/c++config.h \
  /usr/include/x86_64-linux-gnu/c++/13/bits/os_defines.h \
@@ -149,18 +149,4 @@ CMakeFiles/tic-tac-toe.dir/src/main.cpp.o: \
  /usr/include/c++/13/bits/basic_ios.tcc \
  /usr/include/c++/13/bits/ostream.tcc /usr/include/c++/13/istream \
  /usr/include/c++/13/bits/istream.tcc \
- /home/l4f7/tic-tac-toe/include/game.h /usr/include/c++/13/chrono \
- /usr/include/c++/13/bits/chrono.h /usr/include/c++/13/ratio \
- /usr/include/c++/13/cstdint \
- /usr/lib/gcc/x86_64-linux-gnu/13/include/stdint.h /usr/include/stdint.h \
- /usr/include/x86_64-linux-gnu/bits/stdint-uintn.h \
- /usr/include/c++/13/limits /usr/include/c++/13/ctime \
- /usr/include/c++/13/bits/parse_numbers.h /usr/include/c++/13/vector \
- /usr/include/c++/13/bits/stl_uninitialized.h \
- /usr/include/c++/13/bits/stl_vector.h \
- /usr/include/c++/13/bits/stl_bvector.h \
- /usr/include/c++/13/bits/vector.tcc \
- /home/l4f7/tic-tac-toe/include/board.h \
- /home/l4f7/tic-tac-toe/include/move.h \
- /home/l4f7/tic-tac-toe/include/bot.h \
  /home/l4f7/tic-tac-toe/include/interface.h

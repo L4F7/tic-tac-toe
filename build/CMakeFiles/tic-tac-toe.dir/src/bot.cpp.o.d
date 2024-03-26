@@ -1,5 +1,5 @@
 CMakeFiles/tic-tac-toe.dir/src/bot.cpp.o: \
- /home/l4f7/paralelas/tic-tac-toe/src/bot.cpp /usr/include/stdc-predef.h \
+ /home/l4f7/tic-tac-toe/src/bot.cpp /usr/include/stdc-predef.h \
  /usr/include/c++/13/vector /usr/include/c++/13/bits/requires_hosted.h \
  /usr/include/x86_64-linux-gnu/c++/13/bits/c++config.h \
  /usr/include/x86_64-linux-gnu/c++/13/bits/os_defines.h \
@@ -169,8 +169,8 @@ CMakeFiles/tic-tac-toe.dir/src/bot.cpp.o: \
  /usr/include/x86_64-linux-gnu/bits/stdint-uintn.h \
  /usr/include/c++/13/limits /usr/include/c++/13/ctime \
  /usr/include/c++/13/bits/parse_numbers.h \
- /home/l4f7/paralelas/tic-tac-toe/include/bot.h \
- /home/l4f7/paralelas/tic-tac-toe/include/board.h \
- /home/l4f7/paralelas/tic-tac-toe/include/move.h \
- /home/l4f7/paralelas/tic-tac-toe/include/board.h \
- /home/l4f7/paralelas/tic-tac-toe/include/move.h
+ /home/l4f7/tic-tac-toe/include/bot.h \
+ /home/l4f7/tic-tac-toe/include/board.h \
+ /home/l4f7/tic-tac-toe/include/move.h \
+ /home/l4f7/tic-tac-toe/include/board.h \
+ /home/l4f7/tic-tac-toe/include/move.h

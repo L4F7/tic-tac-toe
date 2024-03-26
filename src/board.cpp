@@ -10,6 +10,7 @@ Board::Board() {
 }
 
 void Board::display(bool withIndex) {
+    system("clear");
     std::cout << "\n    Board    \t    Index    " << std::endl;
     std::cout << "-------------\t-------------" << std::endl;
     for (int i = 0; i < 3; ++i) {

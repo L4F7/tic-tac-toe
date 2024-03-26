@@ -4,7 +4,7 @@
 # compile CXX with /usr/bin/c++
 CXX_DEFINES = 
 
-CXX_INCLUDES = -I/home/l4f7/paralelas/tic-tac-toe/include
+CXX_INCLUDES = -I/home/l4f7/tic-tac-toe/include
 
 CXX_FLAGS = 
 

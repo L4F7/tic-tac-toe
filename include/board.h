@@ -6,6 +6,7 @@
 #include "move.h"
 
 class Board {
+
 private:
     std::vector<std::vector<char>> board;
 
@@ -18,6 +19,7 @@ public:
     bool checkWin(char player);
     std::vector<Move> getAvailableMoves();
     void clearBoard();
+    
 };
 
 #endif // BOARD_H

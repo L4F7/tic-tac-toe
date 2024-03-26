@@ -53,10 +53,10 @@ RM = /usr/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/l4f7/paralelas/tic-tac-toe
+CMAKE_SOURCE_DIR = /home/l4f7/tic-tac-toe
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/l4f7/paralelas/tic-tac-toe/build
+CMAKE_BINARY_DIR = /home/l4f7/tic-tac-toe/build
 
 # Include any dependencies generated for this target.
 include CMakeFiles/tic-tac-toe.dir/depend.make
@@ -70,52 +70,82 @@ include CMakeFiles/tic-tac-toe.dir/progress.make
 include CMakeFiles/tic-tac-toe.dir/flags.make
 
 CMakeFiles/tic-tac-toe.dir/src/main.cpp.o: CMakeFiles/tic-tac-toe.dir/flags.make
-CMakeFiles/tic-tac-toe.dir/src/main.cpp.o: /home/l4f7/paralelas/tic-tac-toe/src/main.cpp
+CMakeFiles/tic-tac-toe.dir/src/main.cpp.o: /home/l4f7/tic-tac-toe/src/main.cpp
 CMakeFiles/tic-tac-toe.dir/src/main.cpp.o: CMakeFiles/tic-tac-toe.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/l4f7/paralelas/tic-tac-toe/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/tic-tac-toe.dir/src/main.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/tic-tac-toe.dir/src/main.cpp.o -MF CMakeFiles/tic-tac-toe.dir/src/main.cpp.o.d -o CMakeFiles/tic-tac-toe.dir/src/main.cpp.o -c /home/l4f7/paralelas/tic-tac-toe/src/main.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/l4f7/tic-tac-toe/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/tic-tac-toe.dir/src/main.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/tic-tac-toe.dir/src/main.cpp.o -MF CMakeFiles/tic-tac-toe.dir/src/main.cpp.o.d -o CMakeFiles/tic-tac-toe.dir/src/main.cpp.o -c /home/l4f7/tic-tac-toe/src/main.cpp
 
 CMakeFiles/tic-tac-toe.dir/src/main.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/tic-tac-toe.dir/src/main.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/l4f7/paralelas/tic-tac-toe/src/main.cpp > CMakeFiles/tic-tac-toe.dir/src/main.cpp.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/l4f7/tic-tac-toe/src/main.cpp > CMakeFiles/tic-tac-toe.dir/src/main.cpp.i
 
 CMakeFiles/tic-tac-toe.dir/src/main.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/tic-tac-toe.dir/src/main.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/l4f7/paralelas/tic-tac-toe/src/main.cpp -o CMakeFiles/tic-tac-toe.dir/src/main.cpp.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/l4f7/tic-tac-toe/src/main.cpp -o CMakeFiles/tic-tac-toe.dir/src/main.cpp.s
 
 CMakeFiles/tic-tac-toe.dir/src/board.cpp.o: CMakeFiles/tic-tac-toe.dir/flags.make
-CMakeFiles/tic-tac-toe.dir/src/board.cpp.o: /home/l4f7/paralelas/tic-tac-toe/src/board.cpp
+CMakeFiles/tic-tac-toe.dir/src/board.cpp.o: /home/l4f7/tic-tac-toe/src/board.cpp
 CMakeFiles/tic-tac-toe.dir/src/board.cpp.o: CMakeFiles/tic-tac-toe.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/l4f7/paralelas/tic-tac-toe/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/tic-tac-toe.dir/src/board.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/tic-tac-toe.dir/src/board.cpp.o -MF CMakeFiles/tic-tac-toe.dir/src/board.cpp.o.d -o CMakeFiles/tic-tac-toe.dir/src/board.cpp.o -c /home/l4f7/paralelas/tic-tac-toe/src/board.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/l4f7/tic-tac-toe/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/tic-tac-toe.dir/src/board.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/tic-tac-toe.dir/src/board.cpp.o -MF CMakeFiles/tic-tac-toe.dir/src/board.cpp.o.d -o CMakeFiles/tic-tac-toe.dir/src/board.cpp.o -c /home/l4f7/tic-tac-toe/src/board.cpp
 
 CMakeFiles/tic-tac-toe.dir/src/board.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/tic-tac-toe.dir/src/board.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/l4f7/paralelas/tic-tac-toe/src/board.cpp > CMakeFiles/tic-tac-toe.dir/src/board.cpp.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/l4f7/tic-tac-toe/src/board.cpp > CMakeFiles/tic-tac-toe.dir/src/board.cpp.i
 
 CMakeFiles/tic-tac-toe.dir/src/board.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/tic-tac-toe.dir/src/board.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/l4f7/paralelas/tic-tac-toe/src/board.cpp -o CMakeFiles/tic-tac-toe.dir/src/board.cpp.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/l4f7/tic-tac-toe/src/board.cpp -o CMakeFiles/tic-tac-toe.dir/src/board.cpp.s
 
 CMakeFiles/tic-tac-toe.dir/src/bot.cpp.o: CMakeFiles/tic-tac-toe.dir/flags.make
-CMakeFiles/tic-tac-toe.dir/src/bot.cpp.o: /home/l4f7/paralelas/tic-tac-toe/src/bot.cpp
+CMakeFiles/tic-tac-toe.dir/src/bot.cpp.o: /home/l4f7/tic-tac-toe/src/bot.cpp
 CMakeFiles/tic-tac-toe.dir/src/bot.cpp.o: CMakeFiles/tic-tac-toe.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/l4f7/paralelas/tic-tac-toe/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/tic-tac-toe.dir/src/bot.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/tic-tac-toe.dir/src/bot.cpp.o -MF CMakeFiles/tic-tac-toe.dir/src/bot.cpp.o.d -o CMakeFiles/tic-tac-toe.dir/src/bot.cpp.o -c /home/l4f7/paralelas/tic-tac-toe/src/bot.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/l4f7/tic-tac-toe/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/tic-tac-toe.dir/src/bot.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/tic-tac-toe.dir/src/bot.cpp.o -MF CMakeFiles/tic-tac-toe.dir/src/bot.cpp.o.d -o CMakeFiles/tic-tac-toe.dir/src/bot.cpp.o -c /home/l4f7/tic-tac-toe/src/bot.cpp
 
 CMakeFiles/tic-tac-toe.dir/src/bot.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/tic-tac-toe.dir/src/bot.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/l4f7/paralelas/tic-tac-toe/src/bot.cpp > CMakeFiles/tic-tac-toe.dir/src/bot.cpp.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/l4f7/tic-tac-toe/src/bot.cpp > CMakeFiles/tic-tac-toe.dir/src/bot.cpp.i
 
 CMakeFiles/tic-tac-toe.dir/src/bot.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/tic-tac-toe.dir/src/bot.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/l4f7/paralelas/tic-tac-toe/src/bot.cpp -o CMakeFiles/tic-tac-toe.dir/src/bot.cpp.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/l4f7/tic-tac-toe/src/bot.cpp -o CMakeFiles/tic-tac-toe.dir/src/bot.cpp.s
+
+CMakeFiles/tic-tac-toe.dir/src/game.cpp.o: CMakeFiles/tic-tac-toe.dir/flags.make
+CMakeFiles/tic-tac-toe.dir/src/game.cpp.o: /home/l4f7/tic-tac-toe/src/game.cpp
+CMakeFiles/tic-tac-toe.dir/src/game.cpp.o: CMakeFiles/tic-tac-toe.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/l4f7/tic-tac-toe/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/tic-tac-toe.dir/src/game.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/tic-tac-toe.dir/src/game.cpp.o -MF CMakeFiles/tic-tac-toe.dir/src/game.cpp.o.d -o CMakeFiles/tic-tac-toe.dir/src/game.cpp.o -c /home/l4f7/tic-tac-toe/src/game.cpp
+
+CMakeFiles/tic-tac-toe.dir/src/game.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/tic-tac-toe.dir/src/game.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/l4f7/tic-tac-toe/src/game.cpp > CMakeFiles/tic-tac-toe.dir/src/game.cpp.i
+
+CMakeFiles/tic-tac-toe.dir/src/game.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/tic-tac-toe.dir/src/game.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/l4f7/tic-tac-toe/src/game.cpp -o CMakeFiles/tic-tac-toe.dir/src/game.cpp.s
+
+CMakeFiles/tic-tac-toe.dir/src/interface.cpp.o: CMakeFiles/tic-tac-toe.dir/flags.make
+CMakeFiles/tic-tac-toe.dir/src/interface.cpp.o: /home/l4f7/tic-tac-toe/src/interface.cpp
+CMakeFiles/tic-tac-toe.dir/src/interface.cpp.o: CMakeFiles/tic-tac-toe.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/l4f7/tic-tac-toe/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/tic-tac-toe.dir/src/interface.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/tic-tac-toe.dir/src/interface.cpp.o -MF CMakeFiles/tic-tac-toe.dir/src/interface.cpp.o.d -o CMakeFiles/tic-tac-toe.dir/src/interface.cpp.o -c /home/l4f7/tic-tac-toe/src/interface.cpp
+
+CMakeFiles/tic-tac-toe.dir/src/interface.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/tic-tac-toe.dir/src/interface.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/l4f7/tic-tac-toe/src/interface.cpp > CMakeFiles/tic-tac-toe.dir/src/interface.cpp.i
+
+CMakeFiles/tic-tac-toe.dir/src/interface.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/tic-tac-toe.dir/src/interface.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/l4f7/tic-tac-toe/src/interface.cpp -o CMakeFiles/tic-tac-toe.dir/src/interface.cpp.s
 
 # Object files for target tic-tac-toe
 tic__tac__toe_OBJECTS = \
 "CMakeFiles/tic-tac-toe.dir/src/main.cpp.o" \
 "CMakeFiles/tic-tac-toe.dir/src/board.cpp.o" \
-"CMakeFiles/tic-tac-toe.dir/src/bot.cpp.o"
+"CMakeFiles/tic-tac-toe.dir/src/bot.cpp.o" \
+"CMakeFiles/tic-tac-toe.dir/src/game.cpp.o" \
+"CMakeFiles/tic-tac-toe.dir/src/interface.cpp.o"
 
 # External object files for target tic-tac-toe
 tic__tac__toe_EXTERNAL_OBJECTS =
@@ -123,9 +153,11 @@ tic__tac__toe_EXTERNAL_OBJECTS =
 tic-tac-toe: CMakeFiles/tic-tac-toe.dir/src/main.cpp.o
 tic-tac-toe: CMakeFiles/tic-tac-toe.dir/src/board.cpp.o
 tic-tac-toe: CMakeFiles/tic-tac-toe.dir/src/bot.cpp.o
+tic-tac-toe: CMakeFiles/tic-tac-toe.dir/src/game.cpp.o
+tic-tac-toe: CMakeFiles/tic-tac-toe.dir/src/interface.cpp.o
 tic-tac-toe: CMakeFiles/tic-tac-toe.dir/build.make
 tic-tac-toe: CMakeFiles/tic-tac-toe.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/l4f7/paralelas/tic-tac-toe/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Linking CXX executable tic-tac-toe"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/l4f7/tic-tac-toe/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Linking CXX executable tic-tac-toe"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/tic-tac-toe.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
@@ -137,6 +169,6 @@ CMakeFiles/tic-tac-toe.dir/clean:
 .PHONY : CMakeFiles/tic-tac-toe.dir/clean
 
 CMakeFiles/tic-tac-toe.dir/depend:
-	cd /home/l4f7/paralelas/tic-tac-toe/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/l4f7/paralelas/tic-tac-toe /home/l4f7/paralelas/tic-tac-toe /home/l4f7/paralelas/tic-tac-toe/build /home/l4f7/paralelas/tic-tac-toe/build /home/l4f7/paralelas/tic-tac-toe/build/CMakeFiles/tic-tac-toe.dir/DependInfo.cmake "--color=$(COLOR)"
+	cd /home/l4f7/tic-tac-toe/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/l4f7/tic-tac-toe /home/l4f7/tic-tac-toe /home/l4f7/tic-tac-toe/build /home/l4f7/tic-tac-toe/build /home/l4f7/tic-tac-toe/build/CMakeFiles/tic-tac-toe.dir/DependInfo.cmake "--color=$(COLOR)"
 .PHONY : CMakeFiles/tic-tac-toe.dir/depend
 

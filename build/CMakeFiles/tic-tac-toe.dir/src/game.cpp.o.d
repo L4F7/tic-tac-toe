@@ -1,5 +1,5 @@
-CMakeFiles/tic-tac-toe.dir/src/main.cpp.o: \
- /home/l4f7/tic-tac-toe/src/main.cpp /usr/include/stdc-predef.h \
+CMakeFiles/tic-tac-toe.dir/src/game.cpp.o: \
+ /home/l4f7/tic-tac-toe/src/game.cpp /usr/include/stdc-predef.h \
  /usr/include/c++/13/iostream /usr/include/c++/13/bits/requires_hosted.h \
  /usr/include/x86_64-linux-gnu/c++/13/bits/c++config.h \
  /usr/include/x86_64-linux-gnu/c++/13/bits/os_defines.h \
@@ -162,5 +162,4 @@ CMakeFiles/tic-tac-toe.dir/src/main.cpp.o: \
  /usr/include/c++/13/bits/vector.tcc \
  /home/l4f7/tic-tac-toe/include/board.h \
  /home/l4f7/tic-tac-toe/include/move.h \
- /home/l4f7/tic-tac-toe/include/bot.h \
- /home/l4f7/tic-tac-toe/include/interface.h
+ /home/l4f7/tic-tac-toe/include/bot.h

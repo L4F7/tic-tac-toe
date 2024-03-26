@@ -11,7 +11,25 @@ const char EMPTY = ' ';
 const char PLAYER_X = 'X';
 const char PLAYER_O = 'O';
 
+void Bot::setMode(int mode) {
+    this->mode = mode;
+}
+
+int Bot::getMode() {
+    return mode;
+}
+
 Move Bot::getBestMove(Board & board) {
+    if (mode) {
+        std::cout << "Threaded" << std::endl;
+        return getBestMoveThreaded(board);
+    } else {
+        std::cout << "Non-mode" << std::endl;
+        return getBestMoveNonThreaded(board);
+    }
+}
+
+Move Bot::getBestMoveNonThreaded(Board & board) {
     int bestScore = -1000;
     Move bestMove;
     std::vector <Move> availableMoves = board.getAvailableMoves();
@@ -30,7 +48,7 @@ Move Bot::getBestMove(Board & board) {
 Move Bot::getBestMoveThreaded(Board & board) {
     std::vector<Move> availableMoves = board.getAvailableMoves();
 
-    if (availableMoves.size() < 5) return getBestMove(board);
+    if (availableMoves.size() < 5) return getBestMoveNonThreaded(board);
 
     int bestScore = -1000;
     Move bestMove;

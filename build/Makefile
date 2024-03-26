@@ -57,10 +57,10 @@ RM = /usr/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/l4f7/paralelas/tic-tac-toe
+CMAKE_SOURCE_DIR = /home/l4f7/tic-tac-toe
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/l4f7/paralelas/tic-tac-toe/build
+CMAKE_BINARY_DIR = /home/l4f7/tic-tac-toe/build
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -87,9 +87,9 @@ rebuild_cache/fast: rebuild_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/l4f7/paralelas/tic-tac-toe/build/CMakeFiles /home/l4f7/paralelas/tic-tac-toe/build//CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/l4f7/tic-tac-toe/build/CMakeFiles /home/l4f7/tic-tac-toe/build//CMakeFiles/progress.marks
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/l4f7/paralelas/tic-tac-toe/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/l4f7/tic-tac-toe/build/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -177,6 +177,54 @@ src/bot.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/tic-tac-toe.dir/build.make CMakeFiles/tic-tac-toe.dir/src/bot.cpp.s
 .PHONY : src/bot.cpp.s
 
+src/game.o: src/game.cpp.o
+.PHONY : src/game.o
+
+# target to build an object file
+src/game.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tic-tac-toe.dir/build.make CMakeFiles/tic-tac-toe.dir/src/game.cpp.o
+.PHONY : src/game.cpp.o
+
+src/game.i: src/game.cpp.i
+.PHONY : src/game.i
+
+# target to preprocess a source file
+src/game.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tic-tac-toe.dir/build.make CMakeFiles/tic-tac-toe.dir/src/game.cpp.i
+.PHONY : src/game.cpp.i
+
+src/game.s: src/game.cpp.s
+.PHONY : src/game.s
+
+# target to generate assembly for a file
+src/game.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tic-tac-toe.dir/build.make CMakeFiles/tic-tac-toe.dir/src/game.cpp.s
+.PHONY : src/game.cpp.s
+
+src/interface.o: src/interface.cpp.o
+.PHONY : src/interface.o
+
+# target to build an object file
+src/interface.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tic-tac-toe.dir/build.make CMakeFiles/tic-tac-toe.dir/src/interface.cpp.o
+.PHONY : src/interface.cpp.o
+
+src/interface.i: src/interface.cpp.i
+.PHONY : src/interface.i
+
+# target to preprocess a source file
+src/interface.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tic-tac-toe.dir/build.make CMakeFiles/tic-tac-toe.dir/src/interface.cpp.i
+.PHONY : src/interface.cpp.i
+
+src/interface.s: src/interface.cpp.s
+.PHONY : src/interface.s
+
+# target to generate assembly for a file
+src/interface.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tic-tac-toe.dir/build.make CMakeFiles/tic-tac-toe.dir/src/interface.cpp.s
+.PHONY : src/interface.cpp.s
+
 src/main.o: src/main.cpp.o
 .PHONY : src/main.o
 
@@ -216,6 +264,12 @@ help:
 	@echo "... src/bot.o"
 	@echo "... src/bot.i"
 	@echo "... src/bot.s"
+	@echo "... src/game.o"
+	@echo "... src/game.i"
+	@echo "... src/game.s"
+	@echo "... src/interface.o"
+	@echo "... src/interface.i"
+	@echo "... src/interface.s"
 	@echo "... src/main.o"
 	@echo "... src/main.i"
 	@echo "... src/main.s"
