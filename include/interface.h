@@ -8,6 +8,9 @@ public:
     int displayBotMode();
     void displayCredits();
 
+private:
+    void clearScreen();
+
 };
 
 #endif // INTERFACE_H

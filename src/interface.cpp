@@ -2,8 +2,16 @@
 
 #include "interface.h"
 
+void Interface::clearScreen() {
+    #if defined(_WIN32)
+        system("cls");
+    #elif defined(__linux__)
+        system("clear");
+    #endif
+}
+
 int Interface::displayMenu() {
-    system("clear");
+    clearScreen();
     std::cout << "\n      Tic Tac Toe Game\n" << std::endl;
     std::cout << "1. Player vs Player" << std::endl;
     std::cout << "2. Player vs Bot" << std::endl;
@@ -16,7 +24,7 @@ int Interface::displayMenu() {
 }
 
 int Interface::displayBotMode() {
-    system("clear");
+    clearScreen();
     std::cout << "\n    Choose Bot Difficulty\n" << std::endl;
     std::cout << "1. Impossible" << std::endl;
     std::cout << "2. Impossible Threaded" << std::endl;
@@ -28,7 +36,7 @@ int Interface::displayBotMode() {
 }
 
 void Interface::displayCredits() {
-    system("clear");
+    clearScreen();
     std::cout << std::endl << "Developed by: " << std::endl << std::endl;
     std::cout << "  - Luis Fuentes Fuentes" << std::endl;
     std::cout << "  - Andres Gonzalez Romero" << std::endl;

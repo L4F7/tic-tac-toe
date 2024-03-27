@@ -9,15 +9,15 @@ const char PLAYER_O = 'O';
 bool Game::checkWinOrDraw(Board board){
     if (board.checkWin(PLAYER_X)) {
         board.display();
-        std::cout << std::endl << "       ¡Player X wins!" << std::endl;
+        std::cout << std::endl << "       " << char(173) << "Player X wins!" << std::endl;
         return true;
     } else if (board.checkWin(PLAYER_O)) {
         board.display();
-        std::cout << std::endl << "       ¡Player O wins!" << std::endl;
+        std::cout << std::endl << "       " << char(173) << "Player O wins!" << std::endl;
         return true;
     } else if (board.isFull()) {
         board.display();
-        std::cout << std::endl << "        ¡It's a draw!" << std::endl;
+        std::cout << std::endl << "        " << char(173) << "It's a draw!" << std::endl;
         return true;
     }
 
@@ -70,7 +70,7 @@ void Game::playerVsBot(int mode) {
     std::vector < int > executionTimes;
 
     while (true) {
-        system("clear");
+        
         board.display();
 
         if (currentPlayer == PLAYER_X) {

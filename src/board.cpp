@@ -10,7 +10,13 @@ Board::Board() {
 }
 
 void Board::display(bool withIndex) {
-    system("clear");
+    
+    #if defined(_WIN32)
+        system("cls");
+    #elif defined(__linux__)
+        system("clear");
+    #endif
+
     std::cout << "\n    Board    \t    Index    " << std::endl;
     std::cout << "-------------\t-------------" << std::endl;
     for (int i = 0; i < 3; ++i) {
