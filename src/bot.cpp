@@ -53,21 +53,25 @@ Move Bot::getBestMoveThreaded(Board & board) {
     int bestScore = -1000;
     Move bestMove;
     std::vector<std::thread> threads;
+    std::vector<int> scores(availableMoves.size());
 
-    for (const auto & move : availableMoves) {
-        threads.emplace_back([&]() {
-            Board tempBoard(board); // Create a temporary board for each thread
-            tempBoard.placeMove(move.row, move.col, PLAYER_O);
-            int score = minMax(tempBoard, false);
-            if (score > bestScore) {
-                bestScore = score;
-                bestMove = move;
-            }
-        });
+    for (int i = 0; i < availableMoves.size(); i++) {
+        threads.push_back(std::thread([this, &board, &scores, i, &availableMoves] {
+            Board tempBoard(board); 
+            tempBoard.placeMove(availableMoves[i].row, availableMoves[i].col, PLAYER_O);
+            scores[i] = minMax(tempBoard, false);
+        }));
     }
 
-    for (auto & thread : threads) {
-        thread.join(); // Wait for all threads to finish
+    for (auto & thread: threads) {
+        thread.join();
+    }
+
+    for (int i = 0; i < availableMoves.size(); i++) {
+        if (scores[i] > bestScore) {
+            bestScore = scores[i];
+            bestMove = availableMoves[i];
+        }
     }
 
     return bestMove;

@@ -1,9 +1,9 @@
-#include <iostream>
-
 #include "board.h"
 #include "move.h"
 
 const char EMPTY = ' ';
+const char PLAYER_X = 'X';
+const char PLAYER_O = 'O';
 
 Board::Board() {
     board = std::vector<std::vector<char>>(3, std::vector<char>(3, EMPTY));
@@ -17,18 +17,49 @@ void Board::display(bool withIndex) {
         system("clear");
     #endif
 
-    std::cout << "\n    Board    \t    Index    " << std::endl;
-    std::cout << "-------------\t-------------" << std::endl;
-    for (int i = 0; i < 3; ++i) {
-        std::cout << "| ";
-        for (int j = 0; j < 3; ++j) {
-            std::cout << board[i][j] << " | ";
+    std::map<char, std::vector<std::string>> board_map = {
+        {'X', {"█ █", " █ ", "█ █"}},
+        {'O', {" █ ", "█ █", " █ "}},
+        {' ', {"   ", "   ", "   "}}};
+
+
+    for (int i = 0; i < 13; i++) {
+
+        if(i == 0)
+            std::cout << "╔═════╦═════╦═════╗" << std::endl;
+        else if(i == 12)
+            std::cout << "╚═════╩═════╩═════╝" << std::endl;
+        else if(i % 4 == 0)
+            std::cout << "╠═════╬═════╬═════╣" << std::endl;
+        else {
+
+            for(int j = 0; j < 7; j++){
+
+                std::string color = "\033[31m";
+                std::string colorEnd = "\e[0m";
+
+                if (j == 0)
+                    std::cout << "║ ";
+                else if (j == 6)
+                    std::cout << " ║" << std::endl;
+                else if (j % 2 == 0)
+                    std::cout << " ║ ";
+                else {
+                    int row_index = (i - 1) / 4;
+                    int col_index = (j - 1) / 2;
+                    if (board[row_index][col_index] != EMPTY) {
+                        if (board[row_index][col_index] == PLAYER_O)
+                            color = "\033[36m";
+                        std::cout << color << board_map[board[row_index][col_index]][(i - 1) % 4] << colorEnd;
+                    } else {
+                        std::cout << "   ";
+                    }
+                }
+
+            }
+
         }
-        std::cout << "\t| ";
-        for (int j = 0; j < 3; ++j) {
-            std::cout << i * 3 + j + 1 << " | ";
-        }
-        std::cout << std::endl << "-------------\t" << "-------------" << std::endl;
+
     }
 }
 

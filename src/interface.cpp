@@ -41,6 +41,6 @@ void Interface::displayCredits() {
     std::cout << "  - Luis Fuentes Fuentes" << std::endl;
     std::cout << "  - Andres Gonzalez Romero" << std::endl;
     std::cout << "  - Gerick Vargas Camacho " << std::endl;
-    std::cout << std::endl << "Press ENTER to exit";
+    std::cout << std::endl << "Press ENTER to go back to the main menu...";
     std::cin.ignore().get();
 }

@@ -4,18 +4,22 @@
 
 int main() {
 
+    Interface interface;
+    Game game;
+
     while (true){
-        Interface interface;
-        Game game;
         int option = interface.displayMenu();
         if (option == 1) game.playerVsPlayer();
         if (option == 2) {
             int mode = interface.displayBotMode();
-            if (mode == 3) continue;
+            if (mode == 3) continue; // If the user goes back to the main menu
             game.playerVsBot(mode);
         };
         if (option == 3) interface.displayCredits();
-        if (option == 4) break;
+        if (option == 4){
+            std::cout << "\n    Goodbye, thank you for playing!" << std::endl;
+            break;
+        } 
     }
 
     return 0;

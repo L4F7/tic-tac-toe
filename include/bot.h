@@ -1,6 +1,14 @@
 #ifndef BOT_H
 #define BOT_H
 
+#include <vector>
+#include <algorithm>
+#include <future>
+#include <iostream>
+#include <thread>
+#include <atomic>
+#include <functional>
+
 #include "board.h"
 #include "move.h" 
 
