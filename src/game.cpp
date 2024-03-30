@@ -37,20 +37,24 @@ void Game::playerVsPlayer() {
     char currentPlayer = PLAYER_X;
 
     while (true) {
-        board.display();
 
         int position;
-        std::cout << "\nPlayer " << currentPlayer << "'s turn. \nEnter position (1-9): ";
-        std::cin >> position;
+
+        while(true){
+            board.display();
+            std::cout << "\nPlayer " << currentPlayer << "'s turn. \nEnter position (1-9): ";
+            std::cin >> position;
+
+            if(std::cin.fail() || position < 1 || position > 9)  {
+                std::cin.clear();
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            } else {
+                break;
+            }
+        }
 
         int row = (position - 1) / 3;
         int col = (position - 1) % 3;
-
-        if (position < 1 || position > 9) {
-            std::cout << "\nInvalid move! Press ENTER to try again...\n";
-            std::cin.ignore().get();
-            continue;
-        }
 
         if (board.isEmpty(row, col)) {
             board.placeMove(row, col, currentPlayer);
@@ -80,21 +84,24 @@ void Game::playerVsBot(int mode) {
 
     while (true) {
 
-        board.display();
-
         if (currentPlayer == PLAYER_X) {
             int position;
-            std::cout << "\nPlayer X's turn. \nEnter position (1-9): ";
-            std::cin >> position;
+        
+            while(true){
+                board.display();
+                std::cout << "\nPlayer " << currentPlayer << "'s turn. \nEnter position (1-9): ";
+                std::cin >> position;
+
+                if(std::cin.fail() || position < 1 || position > 9)  {
+                    std::cin.clear();
+                    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                } else {
+                    break;
+                }
+            }
 
             int row = (position - 1) / 3;
             int col = (position - 1) % 3;
-
-            if (position < 1 || position > 9) {
-                std::cout << "\nInvalid move! Press ENTER to try again...\n";
-                std::cin.ignore().get();
-                continue;
-            }
 
             if (board.isEmpty(row, col)) {
                 board.placeMove(row, col, PLAYER_X);
@@ -105,6 +112,9 @@ void Game::playerVsBot(int mode) {
                 continue;
             }
         } else {
+
+            board.display();
+
             // std::cout << "\n Bot's turn...\n";
             // std::this_thread::sleep_for(std::chrono::milliseconds(1000));
 

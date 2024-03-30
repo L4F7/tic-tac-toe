@@ -11,27 +11,45 @@ void Interface::clearScreen() {
 }
 
 int Interface::displayMenu() {
-    clearScreen();
-    std::cout << " \n      Tic Tac Toe Game\n\n";
-    std::cout << " 1. Player vs Player\n";
-    std::cout << " 2. Player vs Bot\n";
-    std::cout << " 3. Credits\n";
-    std::cout << " 4. Exit\n";
     int choice;
-    std::cout << "\n Enter your choice: ";
-    std::cin >> choice;
+    while(true) {
+        clearScreen();
+        std::cout << " \n      Tic Tac Toe Game\n\n";
+        std::cout << " 1. Player vs Player\n";
+        std::cout << " 2. Player vs Bot\n";
+        std::cout << " 3. Credits\n";
+        std::cout << " 4. Exit\n";
+        std::cout << "\n Enter your choice (1-4): ";
+        std::cin >> choice; 
+        
+        if(std::cin.fail())  {
+            std::cin.clear();
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        } else {
+            break;
+        }
+    }
     return choice;
 }
 
 int Interface::displayBotMode() {
-    clearScreen();
-    std::cout << " \n    Choose Bot Difficulty\n\n";
-    std::cout << " 1. Impossible\n";
-    std::cout << " 2. Impossible Threaded\n";
-    std::cout << " 3. Go back\n";
     int choice;
-    std::cout << "\n Enter your choice: ";
-    std::cin >> choice;
+    while(true) {
+        clearScreen();
+        std::cout << " \n    Choose Bot Difficulty\n\n";
+        std::cout << " 1. Impossible\n";
+        std::cout << " 2. Impossible Threaded\n";
+        std::cout << " 3. Go back\n";
+        std::cout << "\n Enter your choice (1-3): ";
+        std::cin >> choice;
+        
+        if(std::cin.fail())  {
+            std::cin.clear();
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        } else {
+            break;
+        }
+    }
     return choice;
 }
 
