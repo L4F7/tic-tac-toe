@@ -6,21 +6,28 @@ const char EMPTY = ' ';
 const char PLAYER_X = 'X';
 const char PLAYER_O = 'O';
 
-bool Game::checkWinOrDraw(Board board){
+bool Game::checkWinOrDraw(Board board) {
+
     if (board.checkWin(PLAYER_X)) {
         board.display();
-        std::cout << std::endl << "       " << char(173) << "Player X wins!" << std::endl;
+        std::cout << "\n                 \033[91m╔══════════════╗\033[0m";
+        std::cout << "\n                 \033[91m║Player X wins!║\033[0m";
+        std::cout << "\n                 \033[91m╚══════════════╝\033[0m\n";
         return true;
     } else if (board.checkWin(PLAYER_O)) {
         board.display();
-        std::cout << std::endl << "       " << char(173) << "Player O wins!" << std::endl;
+
+        std::cout << "\n                 \033[94m╔══════════════╗\033[0m";
+        std::cout << "\n                 \033[94m║Player O wins!║\033[0m";
+        std::cout << "\n                 \033[94m╚══════════════╝\033[0m\n";
         return true;
     } else if (board.isFull()) {
         board.display();
-        std::cout << std::endl << "        " << char(173) << "It's a draw!" << std::endl;
+        std::cout << "\n                  ╔════════════╗";
+        std::cout << "\n                  ║It's a draw!║";
+        std::cout << "\n                  ╚════════════╝\n";
         return true;
     }
-
     return false;
 }
 
@@ -33,14 +40,15 @@ void Game::playerVsPlayer() {
         board.display();
 
         int position;
-        std::cout << std::endl << "Player " << currentPlayer << "'s turn. Enter position (1-9): ";
+        std::cout << "\nPlayer " << currentPlayer << "'s turn. \nEnter position (1-9): ";
         std::cin >> position;
 
         int row = (position - 1) / 3;
         int col = (position - 1) % 3;
 
         if (position < 1 || position > 9) {
-            std::cout << std::endl  << "Invalid position! Try again." << std::endl;
+            std::cout << "\nInvalid move! Press ENTER to try again...\n";
+            std::cin.ignore().get();
             continue;
         }
 
@@ -48,41 +56,43 @@ void Game::playerVsPlayer() {
             board.placeMove(row, col, currentPlayer);
             currentPlayer = (currentPlayer == PLAYER_X) ? PLAYER_O : PLAYER_X;
         } else {
-            std::cout << std::endl  << "Invalid move! Try again." << std::endl;
+            std::cout << "\nInvalid move! Press ENTER to try again...\n";
+            std::cin.ignore().get();
             continue;
         }
 
-        if(checkWinOrDraw(board)) break;
-        
+        if (checkWinOrDraw(board))
+            break;
     }
 
-    std::cout << std::endl << "Press ENTER to go back to the main menu...";
+    std::cout << "\nPress ENTER to go back to the main menu...";
     std::cin.ignore().get();
-
 }
 
 void Game::playerVsBot(int mode) {
     Board board;
     Bot bot;
-    if (mode == 2) bot.setMode(1);
+    if (mode == 2)
+        bot.setMode(1);
 
     char currentPlayer = PLAYER_X;
-    std::vector < int > executionTimes;
+    std::vector<int> executionTimes;
 
     while (true) {
-        
+
         board.display();
 
         if (currentPlayer == PLAYER_X) {
             int position;
-            std::cout << std::endl  << "Player X's turn. Enter position (1-9): ";
+            std::cout << "\nPlayer X's turn. \nEnter position (1-9): ";
             std::cin >> position;
 
             int row = (position - 1) / 3;
             int col = (position - 1) % 3;
 
             if (position < 1 || position > 9) {
-                std::cout << std::endl  << "Invalid position! Try again." << std::endl;
+                std::cout << "\nInvalid move! Press ENTER to try again...\n";
+                std::cin.ignore().get();
                 continue;
             }
 
@@ -90,17 +100,19 @@ void Game::playerVsBot(int mode) {
                 board.placeMove(row, col, PLAYER_X);
                 currentPlayer = PLAYER_O;
             } else {
-                std::cout << std::endl  << "Invalid move! Try again." << std::endl;
+                std::cout << "\nInvalid move! Press ENTER to try again...\n";
+                std::cin.ignore().get();
                 continue;
             }
         } else {
-            std::cout << "\nBot's turn..." << std::endl;
+            // std::cout << "\n Bot's turn...\n";
+            // std::this_thread::sleep_for(std::chrono::milliseconds(1000));
 
             auto start = std::chrono::high_resolution_clock::now();
             Move botMove = bot.getBestMove(board);
             auto stop = std::chrono::high_resolution_clock::now();
 
-            auto duration = std::chrono::duration_cast < std::chrono::microseconds > (stop - start);
+            auto duration = std::chrono::duration_cast<std::chrono::microseconds>(stop - start);
 
             executionTimes.push_back(duration.count());
 
@@ -108,15 +120,23 @@ void Game::playerVsBot(int mode) {
             currentPlayer = PLAYER_X;
         }
 
-        if(checkWinOrDraw(board)) break;
+        if (checkWinOrDraw(board))
+            break;
     }
 
-    std::cout << std::endl << "Execution times: " << std::endl  << std::endl;
-    for (auto time: executionTimes) {
-        std::cout << "Execution time: " << time << " microseconds" << std::endl;
-    }
+    //  ARREGLAR CON STD::LEFT Y STD::SETW
 
-    std::cout << std::endl << "Press ENTER to go back to the main menu...";
+    std::cout << "\n\033[92m          ╔════════════════════════════╗";
+    std::cout << "\n          ║Bot movement execution times║";
+    std::cout << "\n          ╠════════════════════════════╣\n";
+    for (int i = 0; i < executionTimes.size(); i++) {
+        std::cout << "          ║" << std::right << std::setw(10) << executionTimes[i] << std::left << std::setw(18) << " microseconds" << "║\n";
+    }
+    std::cout << "          ╚════════════════════════════╝\033[0m\n";
+    std::cout << "\n Press ENTER to go back to the main menu...";
     std::cin.ignore().get();
-
 }
+/*
+    ╚═════╩═════╩═════╝    ╚═════╩═════╩═════╝
+          ╔════════════════════════════╗
+*/

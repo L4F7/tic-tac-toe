@@ -17,7 +17,7 @@ int main() {
         };
         if (option == 3) interface.displayCredits();
         if (option == 4){
-            std::cout << "\n    Goodbye, thank you for playing!" << std::endl;
+            interface.goodbye();
             break;
         } 
     }

@@ -2,6 +2,8 @@
 #define GAME_H
 
 #include <chrono>
+#include <iomanip>
+#include <thread>
 #include <vector>
 
 #include "board.h"
@@ -9,13 +11,12 @@
 
 class Game {
 
-    public: 
-        void playerVsPlayer();
-        void playerVsBot(int mode);
+public:
+    void playerVsPlayer();
+    void playerVsBot(int mode);
 
-    private:
-        bool checkWinOrDraw(Board board);
-    
+private:
+    bool checkWinOrDraw(Board board);
 };
 
 #endif // GAME_H

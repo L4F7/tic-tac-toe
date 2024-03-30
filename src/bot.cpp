@@ -1,10 +1,10 @@
-#include <vector>
 #include <algorithm>
 #include <iostream>
 #include <thread>
+#include <vector>
 
-#include "bot.h"
 #include "board.h"
+#include "bot.h"
 #include "move.h"
 
 const char EMPTY = ' ';
@@ -19,21 +19,19 @@ int Bot::getMode() {
     return mode;
 }
 
-Move Bot::getBestMove(Board & board) {
+Move Bot::getBestMove(Board &board) {
     if (mode) {
-        std::cout << "Threaded" << std::endl;
         return getBestMoveThreaded(board);
     } else {
-        std::cout << "Non-mode" << std::endl;
         return getBestMoveNonThreaded(board);
     }
 }
 
-Move Bot::getBestMoveNonThreaded(Board & board) {
+Move Bot::getBestMoveNonThreaded(Board &board) {
     int bestScore = -1000;
     Move bestMove;
-    std::vector <Move> availableMoves = board.getAvailableMoves();
-    for (const auto & move: availableMoves) {
+    std::vector<Move> availableMoves = board.getAvailableMoves();
+    for (const auto &move : availableMoves) {
         board.placeMove(move.row, move.col, PLAYER_O);
         int score = minMax(board, false);
         board.placeMove(move.row, move.col, EMPTY);
@@ -45,10 +43,11 @@ Move Bot::getBestMoveNonThreaded(Board & board) {
     return bestMove;
 }
 
-Move Bot::getBestMoveThreaded(Board & board) {
+Move Bot::getBestMoveThreaded(Board &board) {
     std::vector<Move> availableMoves = board.getAvailableMoves();
 
-    if (availableMoves.size() < 5) return getBestMoveNonThreaded(board);
+    if (availableMoves.size() < 5)
+        return getBestMoveNonThreaded(board);
 
     int bestScore = -1000;
     Move bestMove;
@@ -57,13 +56,13 @@ Move Bot::getBestMoveThreaded(Board & board) {
 
     for (int i = 0; i < availableMoves.size(); i++) {
         threads.push_back(std::thread([this, &board, &scores, i, &availableMoves] {
-            Board tempBoard(board); 
+            Board tempBoard(board);
             tempBoard.placeMove(availableMoves[i].row, availableMoves[i].col, PLAYER_O);
             scores[i] = minMax(tempBoard, false);
         }));
     }
 
-    for (auto & thread: threads) {
+    for (auto &thread : threads) {
         thread.join();
     }
 
@@ -77,15 +76,18 @@ Move Bot::getBestMoveThreaded(Board & board) {
     return bestMove;
 }
 
-int Bot::minMax(Board & board, bool isMaximizing) {
-    if (board.checkWin(PLAYER_X)) return -10;
-    if (board.checkWin(PLAYER_O)) return 10;
-    if (board.isFull()) return 0;
+int Bot::minMax(Board &board, bool isMaximizing) {
+    if (board.checkWin(PLAYER_X))
+        return -10;
+    if (board.checkWin(PLAYER_O))
+        return 10;
+    if (board.isFull())
+        return 0;
 
     if (isMaximizing) {
         int bestScore = -1000;
-        std::vector <Move> availableMoves = board.getAvailableMoves();
-        for (const auto & move: availableMoves) {
+        std::vector<Move> availableMoves = board.getAvailableMoves();
+        for (const auto &move : availableMoves) {
             board.placeMove(move.row, move.col, PLAYER_O);
             int score = minMax(board, false);
             board.placeMove(move.row, move.col, EMPTY);
@@ -94,8 +96,8 @@ int Bot::minMax(Board & board, bool isMaximizing) {
         return bestScore;
     } else {
         int bestScore = 1000;
-        std::vector <Move> availableMoves = board.getAvailableMoves();
-        for (const auto & move: availableMoves) {
+        std::vector<Move> availableMoves = board.getAvailableMoves();
+        for (const auto &move : availableMoves) {
             board.placeMove(move.row, move.col, PLAYER_X);
             int score = minMax(board, true);
             board.placeMove(move.row, move.col, EMPTY);
