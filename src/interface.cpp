@@ -77,11 +77,7 @@ void Interface::displayGoodbye() {
 
 void Interface::displayBoard(std::vector<std::vector<char>> board) {
 
-#if defined(_WIN32)
-    system("cls");
-#elif defined(__linux__)
-    system("clear");
-#endif
+    clearScreen();
 
     const char EMPTY = ' ';
     const char PLAYER_X = 'X';

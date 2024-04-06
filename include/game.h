@@ -2,8 +2,6 @@
 #define GAME_H
 
 #include <chrono>
-#include <iomanip>
-#include <thread>
 #include <vector>
 
 #include "board.h"
@@ -23,7 +21,7 @@ public:
 
 private:
     Interface interface;
-    
+
     void playerVsPlayer();
     void playerVsBot(int mode);
     bool checkWinOrDraw(Board board);

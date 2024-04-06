@@ -1,13 +1,11 @@
 #ifndef INTERFACE_H
 #define INTERFACE_H
 
+#include <iomanip>
 #include <iostream>
 #include <limits>
-#include <vector>
 #include <map>
-#include <iomanip>
-#include <thread>
-#include <chrono>
+#include <vector>
 
 class Interface {
 

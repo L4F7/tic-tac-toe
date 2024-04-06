@@ -1,11 +1,6 @@
 #ifndef BOT_H
 #define BOT_H
 
-#include <algorithm>
-#include <atomic>
-#include <functional>
-#include <future>
-#include <iostream>
 #include <thread>
 #include <vector>
 
@@ -13,7 +8,7 @@
 #include "move.h"
 
 class Bot {
-    
+
 public:
     Bot();
     ~Bot();

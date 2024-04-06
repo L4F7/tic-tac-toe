@@ -1,8 +1,6 @@
 #ifndef BOARD_H
 #define BOARD_H
 
-#include <iostream>
-#include <map>
 #include <vector>
 
 #include "move.h"

@@ -1,11 +1,4 @@
-#include <algorithm>
-#include <iostream>
-#include <thread>
-#include <vector>
-
-#include "board.h"
 #include "bot.h"
-#include "move.h"
 
 const char EMPTY = ' ';
 const char PLAYER_X = 'X';

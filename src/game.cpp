@@ -1,5 +1,3 @@
-#include <iostream>
-
 #include "game.h"
 
 const char EMPTY = ' ';
@@ -26,7 +24,7 @@ void Game::start() {
         int option = interface.menu();
 
         if (option == 1) {
-            
+
             playerVsPlayer();
         }
 
