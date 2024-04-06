@@ -6,26 +6,60 @@ const char EMPTY = ' ';
 const char PLAYER_X = 'X';
 const char PLAYER_O = 'O';
 
+Game::Game() {
+    this->interface = Interface();
+
+}
+
+Game::~Game() {}
+
+Interface Game::getInterface() {
+    return interface;
+}
+
+void Game::setInterface(Interface interface) {
+    this->interface = interface;
+}
+
+Board Game::getBoard() {
+    return board;
+}
+
+void Game::setBoard(Board board) {
+    this->board = board;
+}
+
+
+void Game::start() {
+
+    while (true){
+        int option = interface.displayMenu();
+        if (option == 1) this->playerVsPlayer();
+        if (option == 2) {
+            int mode = interface.displayBotMode();
+            if (mode == 3) continue; // If the user goes back to the main menu
+            this->playerVsBot(mode);
+        };
+        if (option == 3) interface.displayCredits();
+        if (option == 4){
+            interface.goodbye();
+            break;
+        } 
+    }
+}
 bool Game::checkWinOrDraw(Board board) {
 
     if (board.checkWin(PLAYER_X)) {
-        board.display();
-        std::cout << "\n                 \033[91m╔══════════════╗\033[0m";
-        std::cout << "\n                 \033[91m║Player X wins!║\033[0m";
-        std::cout << "\n                 \033[91m╚══════════════╝\033[0m\n";
+        this->interface.displayBoard(board.getBoard());
+        this->interface.displayWinMessage(PLAYER_X);
         return true;
     } else if (board.checkWin(PLAYER_O)) {
-        board.display();
-
-        std::cout << "\n                 \033[94m╔══════════════╗\033[0m";
-        std::cout << "\n                 \033[94m║Player O wins!║\033[0m";
-        std::cout << "\n                 \033[94m╚══════════════╝\033[0m\n";
+        this->interface.displayBoard(board.getBoard());
+        this->interface.displayWinMessage(PLAYER_O);
         return true;
     } else if (board.isFull()) {
-        board.display();
-        std::cout << "\n                  ╔════════════╗";
-        std::cout << "\n                  ║It's a draw!║";
-        std::cout << "\n                  ╚════════════╝\n";
+        this->interface.displayBoard(board.getBoard());
+        this->interface.displayDrawMessage();
         return true;
     }
     return false;
@@ -41,7 +75,7 @@ void Game::playerVsPlayer() {
         int position;
 
         while(true){
-            board.display();
+            this->interface.displayBoard(board.getBoard());
             std::cout << "\nPlayer " << currentPlayer << "'s turn. \nEnter position (1-9): ";
             std::cin >> position;
 
@@ -88,7 +122,7 @@ void Game::playerVsBot(int mode) {
             int position;
         
             while(true){
-                board.display();
+                this->interface.displayBoard(board.getBoard());
                 std::cout << "\nPlayer " << currentPlayer << "'s turn. \nEnter position (1-9): ";
                 std::cin >> position;
 
@@ -113,10 +147,7 @@ void Game::playerVsBot(int mode) {
             }
         } else {
 
-            board.display();
-
-            // std::cout << "\n Bot's turn...\n";
-            // std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+            this->interface.displayBoard(board.getBoard());
 
             auto start = std::chrono::high_resolution_clock::now();
             Move botMove = bot.getBestMove(board);
@@ -126,7 +157,7 @@ void Game::playerVsBot(int mode) {
 
             executionTimes.push_back(duration.count());
 
-            board.placeMove(botMove.row, botMove.col, PLAYER_O);
+            board.placeMove(botMove.getRow(), botMove.getCol(), PLAYER_O);
             currentPlayer = PLAYER_X;
         }
 
@@ -134,19 +165,6 @@ void Game::playerVsBot(int mode) {
             break;
     }
 
-    //  ARREGLAR CON STD::LEFT Y STD::SETW
+   this->interface.displayExecutionTimes(executionTimes);
 
-    std::cout << "\n\033[92m          ╔════════════════════════════╗";
-    std::cout << "\n          ║Bot movement execution times║";
-    std::cout << "\n          ╠════════════════════════════╣\n";
-    for (int i = 0; i < executionTimes.size(); i++) {
-        std::cout << "          ║" << std::right << std::setw(10) << executionTimes[i] << std::left << std::setw(18) << " microseconds" << "║\n";
-    }
-    std::cout << "          ╚════════════════════════════╝\033[0m\n";
-    std::cout << "\n Press ENTER to go back to the main menu...";
-    std::cin.ignore().get();
 }
-/*
-    ╚═════╩═════╩═════╝    ╚═════╩═════╩═════╝
-          ╔════════════════════════════╗
-*/

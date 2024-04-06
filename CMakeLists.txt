@@ -11,6 +11,7 @@ set(SOURCES
     src/bot.cpp
     src/game.cpp
     src/interface.cpp
+    src/move.cpp
 )
 
 # Create executable from sources

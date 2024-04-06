@@ -1,7 +1,17 @@
 #ifndef MOVE_H
 #define MOVE_H
 
-struct Move {
+class Move {
+public:
+    Move();
+    Move(int row, int col);
+    ~Move();
+    int getRow() const;
+    int getCol() const;
+    void setRow(int row);
+    void setCol(int col);
+
+private:
     int row;
     int col;
 };

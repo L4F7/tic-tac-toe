@@ -14,7 +14,9 @@ private:
 
 public:
     Board();
-    void display();
+    ~Board();
+    std::vector<std::vector<char>> getBoard();
+    void setBoard(std::vector<std::vector<char>> board);
     bool isFull();
     bool isEmpty(int row, int col);
     void placeMove(int row, int col, char player);
