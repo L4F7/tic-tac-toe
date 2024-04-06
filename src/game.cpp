@@ -7,8 +7,7 @@ const char PLAYER_X = 'X';
 const char PLAYER_O = 'O';
 
 Game::Game() {
-    this->interface = Interface();
-
+    interface = Interface();
 }
 
 Game::~Game() {}
@@ -18,7 +17,7 @@ Interface Game::getInterface() {
 }
 
 void Game::setInterface(Interface interface) {
-    this->interface = interface;
+    interface = interface;
 }
 
 Board Game::getBoard() {
@@ -29,37 +28,45 @@ void Game::setBoard(Board board) {
     this->board = board;
 }
 
-
 void Game::start() {
 
-    while (true){
-        int option = interface.displayMenu();
-        if (option == 1) this->playerVsPlayer();
+    while (true) {
+        int option = interface.displayMenuAndGetChoice();
+
+        if (option == 1) {
+            playerVsPlayer();
+        }
+
         if (option == 2) {
-            int mode = interface.displayBotMode();
-            if (mode == 3) continue; // If the user goes back to the main menu
-            this->playerVsBot(mode);
-        };
-        if (option == 3) interface.displayCredits();
-        if (option == 4){
-            interface.goodbye();
+            int mode = interface.displayBotModeAndGetChoice();
+            if (mode == 3)
+                continue; // If the user goes back to the main menu
+            playerVsBot(mode);
+        }
+
+        if (option == 3) {
+            interface.displayCredits();
+        }
+
+        if (option == 4) {
+            interface.displayGoodbye();
             break;
-        } 
+        }
     }
 }
 bool Game::checkWinOrDraw(Board board) {
 
     if (board.checkWin(PLAYER_X)) {
-        this->interface.displayBoard(board.getBoard());
-        this->interface.displayWinMessage(PLAYER_X);
+        interface.displayBoard(board.getBoard());
+        interface.displayWinMessage(PLAYER_X);
         return true;
     } else if (board.checkWin(PLAYER_O)) {
-        this->interface.displayBoard(board.getBoard());
-        this->interface.displayWinMessage(PLAYER_O);
+        interface.displayBoard(board.getBoard());
+        interface.displayWinMessage(PLAYER_O);
         return true;
     } else if (board.isFull()) {
-        this->interface.displayBoard(board.getBoard());
-        this->interface.displayDrawMessage();
+        interface.displayBoard(board.getBoard());
+        interface.displayDrawMessage();
         return true;
     }
     return false;
@@ -72,20 +79,7 @@ void Game::playerVsPlayer() {
 
     while (true) {
 
-        int position;
-
-        while(true){
-            this->interface.displayBoard(board.getBoard());
-            std::cout << "\nPlayer " << currentPlayer << "'s turn. \nEnter position (1-9): ";
-            std::cin >> position;
-
-            if(std::cin.fail() || position < 1 || position > 9)  {
-                std::cin.clear();
-                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-            } else {
-                break;
-            }
-        }
+        int position = interface.displayPlayerTurnAndGetChoice(currentPlayer, board.getBoard());
 
         int row = (position - 1) / 3;
         int col = (position - 1) % 3;
@@ -94,8 +88,7 @@ void Game::playerVsPlayer() {
             board.placeMove(row, col, currentPlayer);
             currentPlayer = (currentPlayer == PLAYER_X) ? PLAYER_O : PLAYER_X;
         } else {
-            std::cout << "\nInvalid move! Press ENTER to try again...\n";
-            std::cin.ignore().get();
+            interface.displayInvalidMove();
             continue;
         }
 
@@ -103,8 +96,7 @@ void Game::playerVsPlayer() {
             break;
     }
 
-    std::cout << "\nPress ENTER to go back to the main menu...";
-    std::cin.ignore().get();
+    interface.displayGetBackToMenu();
 }
 
 void Game::playerVsBot(int mode) {
@@ -119,20 +111,7 @@ void Game::playerVsBot(int mode) {
     while (true) {
 
         if (currentPlayer == PLAYER_X) {
-            int position;
-        
-            while(true){
-                this->interface.displayBoard(board.getBoard());
-                std::cout << "\nPlayer " << currentPlayer << "'s turn. \nEnter position (1-9): ";
-                std::cin >> position;
-
-                if(std::cin.fail() || position < 1 || position > 9)  {
-                    std::cin.clear();
-                    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-                } else {
-                    break;
-                }
-            }
+            int position = interface.displayPlayerTurnAndGetChoice(currentPlayer, board.getBoard());
 
             int row = (position - 1) / 3;
             int col = (position - 1) % 3;
@@ -141,13 +120,12 @@ void Game::playerVsBot(int mode) {
                 board.placeMove(row, col, PLAYER_X);
                 currentPlayer = PLAYER_O;
             } else {
-                std::cout << "\nInvalid move! Press ENTER to try again...\n";
-                std::cin.ignore().get();
+                interface.displayInvalidMove();
                 continue;
             }
         } else {
 
-            this->interface.displayBoard(board.getBoard());
+            interface.displayBoard(board.getBoard());
 
             auto start = std::chrono::high_resolution_clock::now();
             Move botMove = bot.getBestMove(board);
@@ -165,6 +143,5 @@ void Game::playerVsBot(int mode) {
             break;
     }
 
-   this->interface.displayExecutionTimes(executionTimes);
-
+    interface.displayExecutionTimes(executionTimes);
 }

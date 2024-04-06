@@ -16,7 +16,6 @@ public:
     Game();
     ~Game();
 
-
     Interface getInterface();
     void setInterface(Interface interface);
 
@@ -24,13 +23,14 @@ public:
     void setBoard(Board board);
 
     void start();
-    void playerVsPlayer();
-    void playerVsBot(int mode);
 
 private:
-    bool checkWinOrDraw(Board board);
     Interface interface;
     Board board;
+    
+    void playerVsPlayer();
+    void playerVsBot(int mode);
+    bool checkWinOrDraw(Board board);
 };
 
 #endif // GAME_H

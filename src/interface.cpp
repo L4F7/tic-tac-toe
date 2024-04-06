@@ -12,7 +12,7 @@ void Interface::clearScreen() {
 #endif
 }
 
-int Interface::displayMenu() {
+int Interface::displayMenuAndGetChoice() {
     int choice;
     while(true) {
         clearScreen();
@@ -34,7 +34,12 @@ int Interface::displayMenu() {
     return choice;
 }
 
-int Interface::displayBotMode() {
+void Interface::displayGetBackToMenu() {
+    std::cout << "\n Press ENTER to go back to the main menu...";
+    std::cin.ignore().get();
+}
+
+int Interface::displayBotModeAndGetChoice() {
     int choice;
     while(true) {
         clearScreen();
@@ -61,11 +66,10 @@ void Interface::displayCredits() {
     std::cout << "   - Luis Fuentes Fuentes\n";
     std::cout << "   - Andres Gonzalez Romero\n";
     std::cout << "   - Gerick Vargas Camacho\n";
-    std::cout << "\n Press ENTER to go back to the main menu...";
-    std::cin.ignore().get();
+    displayGetBackToMenu();
 }
 
-void Interface::goodbye() {
+void Interface::displayGoodbye() {
     clearScreen();
     std::cout << "\n    Goodbye. Thank you for playing!\n";
 }
@@ -172,6 +176,31 @@ void Interface::displayBoard(std::vector<std::vector<char>> board) {
     */
 }
 
+int Interface::displayPlayerTurnAndGetChoice(char player, std::vector<std::vector<char>> board) {
+    
+    int position;
+
+    while (true) {
+        displayBoard(board);
+        std::cout << "\nPlayer " << player << "'s turn. \nEnter position (1-9): ";
+        std::cin >> position;
+
+        if (std::cin.fail() || position < 1 || position > 9) {
+            std::cin.clear();
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        } else {
+            break;
+        }
+    }
+
+    return position;
+}
+
+void Interface::displayInvalidMove() {
+    std::cout << "\nInvalid move! Press ENTER to try again...\n";
+    std::cin.ignore().get();
+}
+
 void Interface::displayWinMessage(char player) {
 
     std::string color = "\033[91m";
@@ -198,6 +227,5 @@ void Interface::displayExecutionTimes(std::vector<int> executionTimes) {
         std::cout << "          ║" << std::right << std::setw(10) << executionTimes[i] << std::left << std::setw(18) << " microseconds" << "║\n";
     }
     std::cout << "          ╚════════════════════════════╝\033[0m\n";
-    std::cout << "\n Press ENTER to go back to the main menu...";
-    std::cin.ignore().get();
+    displayGetBackToMenu();
 }

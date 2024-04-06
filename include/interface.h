@@ -6,19 +6,22 @@
 #include <vector>
 #include <map>
 #include <iomanip>
-
-
+#include <thread>
+#include <chrono>
 
 class Interface {
 
 public:
     Interface();
     ~Interface();
-    int displayMenu();
-    int displayBotMode();
+    int displayMenuAndGetChoice();
+    void displayGetBackToMenu();
+    int displayBotModeAndGetChoice();
     void displayCredits();
     void displayBoard(std::vector<std::vector<char>> board);
-    void goodbye();
+    int displayPlayerTurnAndGetChoice(char player, std::vector<std::vector<char>> board);
+    void displayInvalidMove();
+    void displayGoodbye();
     void displayWinMessage(char player);
     void displayDrawMessage();
     void displayExecutionTimes(std::vector<int> executionTimes);
