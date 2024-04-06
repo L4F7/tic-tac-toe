@@ -31,14 +31,14 @@ void Game::setBoard(Board board) {
 void Game::start() {
 
     while (true) {
-        int option = interface.displayMenuAndGetChoice();
+        int option = interface.menu();
 
         if (option == 1) {
             playerVsPlayer();
         }
 
         if (option == 2) {
-            int mode = interface.displayBotModeAndGetChoice();
+            int mode = interface.botMode();
             if (mode == 3)
                 continue; // If the user goes back to the main menu
             playerVsBot(mode);
@@ -79,7 +79,7 @@ void Game::playerVsPlayer() {
 
     while (true) {
 
-        int position = interface.displayPlayerTurnAndGetChoice(currentPlayer, board.getBoard());
+        int position = interface.playerTurn(currentPlayer, board.getBoard());
 
         int row = (position - 1) / 3;
         int col = (position - 1) % 3;
@@ -111,7 +111,7 @@ void Game::playerVsBot(int mode) {
     while (true) {
 
         if (currentPlayer == PLAYER_X) {
-            int position = interface.displayPlayerTurnAndGetChoice(currentPlayer, board.getBoard());
+            int position = interface.playerTurn(currentPlayer, board.getBoard());
 
             int row = (position - 1) / 3;
             int col = (position - 1) % 3;

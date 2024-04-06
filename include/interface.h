@@ -14,12 +14,12 @@ class Interface {
 public:
     Interface();
     ~Interface();
-    int displayMenuAndGetChoice();
+    int menu();
     void displayGetBackToMenu();
-    int displayBotModeAndGetChoice();
+    int botMode();
     void displayCredits();
     void displayBoard(std::vector<std::vector<char>> board);
-    int displayPlayerTurnAndGetChoice(char player, std::vector<std::vector<char>> board);
+    int playerTurn(char player, std::vector<std::vector<char>> board);
     void displayInvalidMove();
     void displayGoodbye();
     void displayWinMessage(char player);

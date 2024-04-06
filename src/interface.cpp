@@ -12,7 +12,7 @@ void Interface::clearScreen() {
 #endif
 }
 
-int Interface::displayMenuAndGetChoice() {
+int Interface::menu() {
     int choice;
     while(true) {
         clearScreen();
@@ -39,7 +39,7 @@ void Interface::displayGetBackToMenu() {
     std::cin.ignore().get();
 }
 
-int Interface::displayBotModeAndGetChoice() {
+int Interface::botMode() {
     int choice;
     while(true) {
         clearScreen();
@@ -176,7 +176,7 @@ void Interface::displayBoard(std::vector<std::vector<char>> board) {
     */
 }
 
-int Interface::displayPlayerTurnAndGetChoice(char player, std::vector<std::vector<char>> board) {
+int Interface::playerTurn(char player, std::vector<std::vector<char>> board) {
     
     int position;
 
