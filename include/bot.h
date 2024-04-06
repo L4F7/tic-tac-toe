@@ -15,6 +15,9 @@
 class Bot {
     
 public:
+    Bot();
+    ~Bot();
+
     void setMode(int mode);
     int getMode();
 
@@ -23,7 +26,7 @@ public:
     Move getBestMoveThreaded(Board &board);
 
 private:
-    int mode = 0;
+    int mode;
     int minMax(Board &board, bool isMaximizing);
 };
 

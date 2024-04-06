@@ -11,6 +11,13 @@ const char EMPTY = ' ';
 const char PLAYER_X = 'X';
 const char PLAYER_O = 'O';
 
+Bot::Bot() {
+    mode = 0;
+}
+
+Bot::~Bot() {
+}
+
 void Bot::setMode(int mode) {
     this->mode = mode;
 }

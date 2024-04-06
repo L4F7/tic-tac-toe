@@ -19,14 +19,10 @@ public:
     Interface getInterface();
     void setInterface(Interface interface);
 
-    Board getBoard();
-    void setBoard(Board board);
-
     void start();
 
 private:
     Interface interface;
-    Board board;
     
     void playerVsPlayer();
     void playerVsBot(int mode);

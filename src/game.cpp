@@ -20,20 +20,13 @@ void Game::setInterface(Interface interface) {
     interface = interface;
 }
 
-Board Game::getBoard() {
-    return board;
-}
-
-void Game::setBoard(Board board) {
-    this->board = board;
-}
-
 void Game::start() {
 
     while (true) {
         int option = interface.menu();
 
         if (option == 1) {
+            
             playerVsPlayer();
         }
 
