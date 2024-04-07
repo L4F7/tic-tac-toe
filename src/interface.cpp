@@ -83,6 +83,19 @@ void Interface::displayBoard(std::vector<std::vector<char>> board) {
     const char PLAYER_X = 'X';
     const char PLAYER_O = 'O';
 
+    const std::string boardTop = "    ╔═════╦═════╦═════╗    ╔═════╦═════╦═════╗\n";
+    const std::string boardBottom = "    ╚═════╩═════╩═════╝    ╚═════╩═════╩═════╝\n";
+    const std::string boardMiddle = "    ╠═════╬═════╬═════╣    ╠═════╬═════╬═════╣\n";
+    const std::string emptyCell = "   ";
+
+    // Colors
+    const std::string strikethroughDarkRed = "\033[91m\033[9m";
+    const std::string strikethroughDarkBlue = "\033[9m\033[94m";
+    const std::string redColor = "\033[31m";
+    const std::string blueColor = "\033[34m";
+    const std::string whiteColor = "\033[39m";
+    const std::string colorReset = "\e[0m";
+
     std::map<char, std::vector<std::string>> board_map = {
         {'X', {"█ █", " █ ", "█ █"}},
         {'O', {" █ ", "█ █", " █ "}},
@@ -91,17 +104,14 @@ void Interface::displayBoard(std::vector<std::vector<char>> board) {
     for (int i = 0; i < 13; i++) {
 
         if (i == 0)
-            std::cout << "    ╔═════╦═════╦═════╗    ╔═════╦═════╦═════╗\n";
+            std::cout << boardTop;
         else if (i == 12)
-            std::cout << "    ╚═════╩═════╩═════╝    ╚═════╩═════╩═════╝\n";
+            std::cout << boardBottom;
         else if (i % 4 == 0)
-            std::cout << "    ╠═════╬═════╬═════╣    ╠═════╬═════╬═════╣\n";
+            std::cout << boardMiddle;
         else {
 
             for (int j = 0; j < 7; j++) {
-
-                std::string color = "\033[31m";
-                std::string colorEnd = "\e[0m";
 
                 if (j == 0) {
                     std::cout << "    ║ ";
@@ -112,28 +122,22 @@ void Interface::displayBoard(std::vector<std::vector<char>> board) {
                         int row_index = (i - 1) / 4;
                         int col_index = (j - 1) / 2;
 
-                        std::string firstColor = "\033[39m";
-                        std::string secondColor = "\033[39m";
-                        std::string thirdColor = "\033[39m";
+                        int firstCell = board[row_index][col_index - 2];
+                        int secondCell = board[row_index][col_index - 1];
+                        int thirdCell = board[row_index][col_index];
 
-                        if (board[row_index][col_index - 2] == PLAYER_O)
-                            firstColor = "\033[94m\033[9m";
-                        else if (board[row_index][col_index - 2] == PLAYER_X)
-                            firstColor = "\033[91m\033[9m";
+                        std::string firstColor = (firstCell == PLAYER_O) ? strikethroughDarkBlue : ((firstCell == PLAYER_X) ? strikethroughDarkRed : whiteColor);
+                        std::string secondColor = (secondCell == PLAYER_O) ? strikethroughDarkBlue : ((secondCell == PLAYER_X) ? strikethroughDarkRed : whiteColor);
+                        std::string thirdColor = (thirdCell == PLAYER_O) ? strikethroughDarkBlue : ((thirdCell == PLAYER_X) ? strikethroughDarkRed : whiteColor);
 
-                        if (board[row_index][col_index - 1] == PLAYER_O)
-                            secondColor = "\033[94m\033[9m";
-                        else if (board[row_index][col_index - 1] == PLAYER_X)
-                            secondColor = "\033[91m\033[9m";
 
-                        if (board[row_index][col_index] == PLAYER_O)
-                            thirdColor = "\033[94m\033[9m";
-                        else if (board[row_index][col_index] == PLAYER_X)
-                            thirdColor = "\033[91m\033[9m";
+                        int num = i - row_index - 1;
 
-                        int num = i - (i - 1) / 4 - 1;
+                        std::string firstCellStr = firstColor + std::to_string(num) + colorReset;
+                        std::string secondCellStr = secondColor + std::to_string(num + 1) + colorReset;
+                        std::string thirdCellStr = thirdColor + std::to_string(num + 2) + colorReset;
 
-                        std::cout << "║  " << firstColor << num << colorEnd << "  ║  " << secondColor << num + 1 << colorEnd << "  ║  " << thirdColor << num + 2 << colorEnd << "  ║\n";
+                        std::cout << "║  " << firstCellStr << "  ║  " << secondCellStr << "  ║  " << thirdCellStr << "  ║\n";
 
                     } else {
                         std::cout << "║     ║     ║     ║\n";
@@ -143,33 +147,20 @@ void Interface::displayBoard(std::vector<std::vector<char>> board) {
                 } else {
                     int row_index = (i - 1) / 4;
                     int col_index = (j - 1) / 2;
+
+                    std::string color = redColor;
+
                     if (board[row_index][col_index] != EMPTY) {
                         if (board[row_index][col_index] == PLAYER_O)
-                            color = "\033[34m";
-                        std::cout << color << board_map[board[row_index][col_index]][(i - 1) % 4] << colorEnd;
+                            color = blueColor;
+                        std::cout << color << board_map[board[row_index][col_index]][(i - 1) % 4] << colorReset;
                     } else {
-                        std::cout << "   ";
+                        std::cout << emptyCell;
                     }
                 }
             }
         }
     }
-    /*
-    0  1  2  3  4  5  6
-    ╔═════╦═════╦═════╗ 0
-    ║     ║     ║     ║ 1
-    ║  1  ║  2  ║  3  ║ 2       0-0 0-1 0-2
-    ║     ║     ║     ║ 3
-    ╠═════╬═════╬═════╣ 4
-    ║     ║     ║     ║ 5
-    ║  4  ║  5  ║  6  ║ 6       1-0 1-1 1-2
-    ║     ║     ║     ║ 7
-    ╠═════╬═════╬═════╣ 8
-    ║     ║     ║     ║ 9
-    ║  7  ║  8  ║  9  ║ 10      2-0 2-1 2-2
-    ║     ║     ║     ║ 11
-    ╚═════╩═════╩═════╝ 12
-    */
 }
 
 int Interface::playerTurn(char player, std::vector<std::vector<char>> board) {
