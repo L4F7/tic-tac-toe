@@ -19,12 +19,24 @@ void Game::setInterface(Interface interface) {
 }
 
 void Game::start() {
+    
+    setlocale(LC_ALL, "");
+
+    initscr(); // Initialize ncurses
+    raw(); // Disable line buffering
+    keypad(stdscr, TRUE); // Enable keypad for arrow keys
+
+    start_color(); // Start color mode
+    init_pair(1, COLOR_RED, COLOR_BLACK); // Define color pair 1 (red)
+    init_pair(2, COLOR_BLUE, COLOR_BLACK); // Define color pair 2 (blue)
+    init_pair(3, COLOR_GREEN, COLOR_BLACK); // Define color pair 2 (green)
+    init_pair(4, COLOR_WHITE, COLOR_BLACK); // Define color pair 2 (yellow)
+
 
     while (true) {
         int option = interface.menu();
 
         if (option == 1) {
-
             playerVsPlayer();
         }
 
@@ -44,18 +56,27 @@ void Game::start() {
             break;
         }
     }
+    
+    refresh(); // Refresh the screen
+    endwin(); // End ncurses
+    
+    system("clear");
+
 }
 bool Game::checkWinOrDraw(Board board) {
 
     if (board.checkWin(PLAYER_X)) {
+        clear();
         interface.displayBoard(board.getBoard());
         interface.displayWinMessage(PLAYER_X);
         return true;
     } else if (board.checkWin(PLAYER_O)) {
+        clear();
         interface.displayBoard(board.getBoard());
         interface.displayWinMessage(PLAYER_O);
         return true;
     } else if (board.isFull()) {
+        clear();
         interface.displayBoard(board.getBoard());
         interface.displayDrawMessage();
         return true;
@@ -70,7 +91,9 @@ void Game::playerVsPlayer() {
 
     while (true) {
 
-        int position = interface.playerTurn(currentPlayer, board.getBoard());
+        int position = interface.playerTurn(currentPlayer, board);
+
+        refresh();
 
         int row = (position - 1) / 3;
         int col = (position - 1) % 3;
@@ -102,7 +125,7 @@ void Game::playerVsBot(int mode) {
     while (true) {
 
         if (currentPlayer == PLAYER_X) {
-            int position = interface.playerTurn(currentPlayer, board.getBoard());
+            int position = interface.playerTurn(currentPlayer, board);
 
             int row = (position - 1) / 3;
             int col = (position - 1) % 3;
@@ -115,6 +138,8 @@ void Game::playerVsBot(int mode) {
                 continue;
             }
         } else {
+
+            clear();
 
             interface.displayBoard(board.getBoard());
 
@@ -135,4 +160,6 @@ void Game::playerVsBot(int mode) {
     }
 
     interface.displayExecutionTimes(executionTimes);
+
+    interface.displayGetBackToMenu();
 }

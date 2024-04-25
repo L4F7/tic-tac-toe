@@ -8,6 +8,10 @@ Board::Board() {
     board = std::vector<std::vector<char>>(3, std::vector<char>(3, EMPTY));
 }
 
+Board::Board(std::vector<std::vector<char>> board) {
+    this->board = board;
+}
+
 Board::~Board() {}
 
 std::vector<std::vector<char>> Board::getBoard() {
@@ -62,6 +66,53 @@ std::vector<Move> Board::getAvailableMoves() {
         }
     }
     return moves;
+}
+
+std::vector<int> Board::getFirstAvailableMove() {
+    for (int i = 0; i < 3; ++i) {
+        for (int j = 0; j < 3; ++j) {
+            if (board[i][j] == EMPTY) {
+                return {i, j};
+            }
+        }
+    }
+    return {-1, -1};
+}
+
+std::vector<int> Board::getMoveUp(std::vector<int> position) {
+    int row = position[0];
+    int col = position[1];
+    if (row - 1 >= 0) {
+        return {row - 1, col};
+    }
+    return {-1, -1};
+}
+
+std::vector<int> Board::getMoveDown(std::vector<int> position) {
+    int row = position[0];
+    int col = position[1];
+    if (row + 1 < 3) {
+        return {row + 1, col};
+    }
+    return {-1, -1};
+}
+
+std::vector<int> Board::getMoveLeft(std::vector<int> position) {
+    int row = position[0];
+    int col = position[1];
+    if (col - 1 >= 0) {
+        return {row, col - 1};
+    }
+    return {-1, -1};
+}
+
+std::vector<int> Board::getMoveRight(std::vector<int> position) {
+    int row = position[0];
+    int col = position[1];
+    if (col + 1 < 3) {
+        return {row, col + 1};
+    }
+    return {-1, -1};
 }
 
 void Board::clearBoard() {

@@ -31,6 +31,7 @@ Install dependencies
 ```bash
   sudo apt-get update
   sudo apt-get install g++ gdb cmake
+  sudo apt-get install libncurses5-dev libncursesw5-dev
 ```
 
 Allow run.sh file execution

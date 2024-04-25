@@ -16,3 +16,6 @@ set(SOURCES
 
 # Create executable from sources
 add_executable(tic-tac-toe ${SOURCES})
+
+# Link against the ncurses library
+target_link_libraries(tic-tac-toe PRIVATE ncursesw)

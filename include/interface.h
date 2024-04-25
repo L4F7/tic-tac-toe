@@ -5,7 +5,10 @@
 #include <iostream>
 #include <limits>
 #include <map>
+#include <ncurses.h>
 #include <vector>
+
+#include "board.h"
 
 class Interface {
 
@@ -16,16 +19,14 @@ public:
     void displayGetBackToMenu();
     int botMode();
     void displayCredits();
-    void displayBoard(std::vector<std::vector<char>> board);
-    int playerTurn(char player, std::vector<std::vector<char>> board);
+    void displayBoard(Board board);
+    int playingBoard(char player, Board board);
+    int playerTurn(char player, Board board);
     void displayInvalidMove();
     void displayGoodbye();
     void displayWinMessage(char player);
     void displayDrawMessage();
     void displayExecutionTimes(std::vector<int> executionTimes);
-
-private:
-    void clearScreen();
 };
 
 #endif // INTERFACE_H

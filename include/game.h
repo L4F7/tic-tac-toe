@@ -2,6 +2,7 @@
 #define GAME_H
 
 #include <chrono>
+#include <locale.h>
 #include <vector>
 
 #include "board.h"

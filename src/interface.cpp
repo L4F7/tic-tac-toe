@@ -4,96 +4,148 @@ Interface::Interface() {}
 
 Interface::~Interface() {}
 
-void Interface::clearScreen() {
-#if defined(_WIN32)
-    system("cls");
-#elif defined(__linux__)
-    system("clear");
-#endif
-}
-
 int Interface::menu() {
-    int choice;
-    while(true) {
-        clearScreen();
-        std::cout << " \n      Tic Tac Toe Game\n\n";
-        std::cout << " 1. Player vs Player\n";
-        std::cout << " 2. Player vs Bot\n";
-        std::cout << " 3. Credits\n";
-        std::cout << " 4. Exit\n";
-        std::cout << "\n Enter your choice (1-4): ";
-        std::cin >> choice; 
-        
-        if(std::cin.fail())  {
-            std::cin.clear();
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-        } else {
-            break;
+
+    int choice = 1; // Initially selected option
+
+    while (true) {
+        clear(); // Clear the screen
+        printw(" \n      Tic Tac Toe Game\n\n");
+        // Print options
+        for (int i = 1; i <= 4; ++i) {
+            printw("      ");
+            if (i == choice) {
+                printw(" ");
+                attron(A_REVERSE); // Highlight current option
+            }
+            switch (i) {
+            case 1:
+                printw("Player vs Player\n");
+                break;
+            case 2:
+                printw("Player vs Bot\n");
+                break;
+            case 3:
+                printw("Credits\n");
+                break;
+            case 4:
+                printw("Exit\n");
+                break;
+            }
+            if (i == choice) {
+                attroff(A_REVERSE); // Turn off highlighting
+            }
         }
+
+        int ch = getch(); // Wait for a key press
+
+        if (ch == 'q' || ch == 'Q') {
+            endwin(); // End ncurses
+            return 4; // Exit the program
+        } else if (ch == KEY_UP) {
+            if (choice > 1) {
+                choice--;
+            }
+        } else if (ch == KEY_DOWN) {
+            if (choice < 4) {
+                choice++;
+            }
+        } else if (ch == '\n' && choice >= 1 && choice <= 4) {
+            return choice; // Return the selected option
+        }
+
+        refresh(); // Refresh the screen
     }
-    return choice;
 }
 
 void Interface::displayGetBackToMenu() {
-    std::cout << "\n Press ENTER to go back to the main menu...";
-    std::cin.ignore().get();
+    printw("\n Press ANY KEY to go back to the main menu...");
+    refresh();
+    getch(); // Wait for any key press
 }
 
 int Interface::botMode() {
-    int choice;
-    while(true) {
-        clearScreen();
-        std::cout << " \n    Choose Bot Difficulty\n\n";
-        std::cout << " 1. Impossible\n";
-        std::cout << " 2. Impossible Threaded\n";
-        std::cout << " 3. Go back\n";
-        std::cout << "\n Enter your choice (1-3): ";
-        std::cin >> choice;
-        
-        if(std::cin.fail())  {
-            std::cin.clear();
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-        } else {
-            break;
+
+    int choice = 1; // Initially selected option
+
+    while (true) {
+        clear(); // Clear the screen
+        printw(" \n    Choose Bot Difficulty\n\n");
+        // Print options
+        for (int i = 1; i <= 3; ++i) {
+            printw("      ");
+            if (i == choice) {
+                printw(" ");
+                attron(A_REVERSE); // Highlight current option
+            }
+            switch (i) {
+            case 1:
+                printw("Impossible\n");
+                break;
+            case 2:
+                printw("Impossible Threaded\n");
+                break;
+            case 3:
+                printw("Go back\n");
+                break;
+            }
+            if (i == choice) {
+                attroff(A_REVERSE); // Turn off highlighting
+            }
+        }
+
+        refresh();
+
+        int ch = getch(); // Wait for a key press
+
+        if (ch == 'q' || ch == 'Q') {
+            endwin(); // End ncurses
+            return 4; // Exit the program
+        } else if (ch == KEY_UP) {
+            if (choice > 1) {
+                choice--;
+            }
+        } else if (ch == KEY_DOWN) {
+            if (choice < 3) {
+                choice++;
+            }
+        } else if (ch == '\n' && choice >= 1 && choice <= 3) {
+            endwin();      // End ncurses
+            return choice; // Return the selected option
         }
     }
-    return choice;
 }
 
 void Interface::displayCredits() {
-    clearScreen();
-    std::cout << "\n Developed by: \n\n";
-    std::cout << "   - Luis Fuentes Fuentes\n";
-    std::cout << "   - Andres Gonzalez Romero\n";
-    std::cout << "   - Gerick Vargas Camacho\n";
+    clear();
+    printw("\n Developed by: \n\n");
+    printw("   - Luis Fuentes Fuentes\n");
+    printw("   - Andres Gonzalez Romero\n");
+    printw("   - Gerick Vargas Camacho\n");
     displayGetBackToMenu();
 }
 
 void Interface::displayGoodbye() {
-    clearScreen();
+    clear();
     std::cout << "\n    Goodbye. Thank you for playing!\n";
 }
 
+void Interface::displayBoard(Board board) {
 
-void Interface::displayBoard(std::vector<std::vector<char>> board) {
-
-    clearScreen();
-
+    // Constants
     const char EMPTY = ' ';
     const char PLAYER_X = 'X';
     const char PLAYER_O = 'O';
 
-    const std::string boardTop = "    ╔═════╦═════╦═════╗    ╔═════╦═════╦═════╗\n";
-    const std::string boardBottom = "    ╚═════╩═════╩═════╝    ╚═════╩═════╩═════╝\n";
-    const std::string boardMiddle = "    ╠═════╬═════╬═════╣    ╠═════╬═════╬═════╣\n";
+    // Board
+    const std::string boardTop = "\n\n               ╔═════╦═════╦═════╗\n";
+    const std::string boardBottom = "               ╚═════╩═════╩═════╝\n";
+    const std::string boardMiddle = "               ╠═════╬═════╬═════╣\n";
     const std::string emptyCell = "   ";
 
     // Colors
-    const std::string strikethroughDarkRed = "\033[91m\033[9m";
-    const std::string strikethroughDarkBlue = "\033[9m\033[94m";
     const std::string redColor = "\033[31m";
     const std::string blueColor = "\033[34m";
-    const std::string whiteColor = "\033[39m";
     const std::string colorReset = "\e[0m";
 
     std::map<char, std::vector<std::string>> board_map = {
@@ -104,58 +156,41 @@ void Interface::displayBoard(std::vector<std::vector<char>> board) {
     for (int i = 0; i < 13; i++) {
 
         if (i == 0)
-            std::cout << boardTop;
+            printw("%s", boardTop.c_str());
         else if (i == 12)
-            std::cout << boardBottom;
+            printw("%s", boardBottom.c_str());
         else if (i % 4 == 0)
-            std::cout << boardMiddle;
+            printw("%s", boardMiddle.c_str());
         else {
 
             for (int j = 0; j < 7; j++) {
 
                 if (j == 0) {
-                    std::cout << "    ║ ";
+                    printw("               ║ ");
                 } else if (j == 6) {
-                    std::cout << " ║";
-                    std::cout << "    ";
-                    if (i % 2 == 0) {
-                        int row_index = (i - 1) / 4;
-                        int col_index = (j - 1) / 2;
-
-                        int firstCell = board[row_index][col_index - 2];
-                        int secondCell = board[row_index][col_index - 1];
-                        int thirdCell = board[row_index][col_index];
-
-                        std::string firstColor = (firstCell == PLAYER_O) ? strikethroughDarkBlue : ((firstCell == PLAYER_X) ? strikethroughDarkRed : whiteColor);
-                        std::string secondColor = (secondCell == PLAYER_O) ? strikethroughDarkBlue : ((secondCell == PLAYER_X) ? strikethroughDarkRed : whiteColor);
-                        std::string thirdColor = (thirdCell == PLAYER_O) ? strikethroughDarkBlue : ((thirdCell == PLAYER_X) ? strikethroughDarkRed : whiteColor);
-
-
-                        int num = i - row_index - 1;
-
-                        std::string firstCellStr = firstColor + std::to_string(num) + colorReset;
-                        std::string secondCellStr = secondColor + std::to_string(num + 1) + colorReset;
-                        std::string thirdCellStr = thirdColor + std::to_string(num + 2) + colorReset;
-
-                        std::cout << "║  " << firstCellStr << "  ║  " << secondCellStr << "  ║  " << thirdCellStr << "  ║\n";
-
-                    } else {
-                        std::cout << "║     ║     ║     ║\n";
-                    }
+                    printw(" ║\n");
                 } else if (j % 2 == 0) {
-                    std::cout << " ║ ";
+                    printw(" ║ ");
                 } else {
                     int row_index = (i - 1) / 4;
                     int col_index = (j - 1) / 2;
 
                     std::string color = redColor;
 
-                    if (board[row_index][col_index] != EMPTY) {
-                        if (board[row_index][col_index] == PLAYER_O)
-                            color = blueColor;
-                        std::cout << color << board_map[board[row_index][col_index]][(i - 1) % 4] << colorReset;
+                    std::vector<std::vector<char>> currentBoard = board.getBoard();
+
+                    if (currentBoard[row_index][col_index] != EMPTY) {
+                        if (currentBoard[row_index][col_index] == PLAYER_O) {
+                            attron(COLOR_PAIR(2));
+                            printw("%s", board_map[currentBoard[row_index][col_index]][(i - 1) % 4].c_str());
+                            attroff(COLOR_PAIR(2));
+                        } else if (currentBoard[row_index][col_index] == PLAYER_X) {
+                            attron(COLOR_PAIR(1));
+                            printw("%s", board_map[currentBoard[row_index][col_index]][(i - 1) % 4].c_str());
+                            attroff(COLOR_PAIR(1));
+                        }
                     } else {
-                        std::cout << emptyCell;
+                        printw("%s", emptyCell.c_str());
                     }
                 }
             }
@@ -163,56 +198,195 @@ void Interface::displayBoard(std::vector<std::vector<char>> board) {
     }
 }
 
-int Interface::playerTurn(char player, std::vector<std::vector<char>> board) {
-    
-    int position;
+int Interface::playingBoard(char player, Board board) {
+
+    std::vector<int> currentPosition = board.getFirstAvailableMove();
+    std::vector<int> newPosition = currentPosition;
+    std::vector<int> invalidPosition = {-1, -1};
+
+    std::map<std::vector<int>, int> positions = {
+        {{0, 0}, 1},
+        {{0, 1}, 2},
+        {{0, 2}, 3},
+        {{1, 0}, 4},
+        {{1, 1}, 5},
+        {{1, 2}, 6},
+        {{2, 0}, 7},
+        {{2, 1}, 8},
+        {{2, 2}, 9}};
 
     while (true) {
-        displayBoard(board);
-        std::cout << "\nPlayer " << player << "'s turn. \nEnter position (1-9): ";
-        std::cin >> position;
+        clear(); // Clear the screen
 
-        if (std::cin.fail() || position < 1 || position > 9) {
-            std::cin.clear();
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-        } else {
+        //-----------------------------------------------------------------------------------------------------
+
+        // Constants
+        const char EMPTY = ' ';
+        const char PLAYER_X = 'X';
+        const char PLAYER_O = 'O';
+
+        // Board
+        const std::string boardTop = "               ╔═════╦═════╦═════╗\n";
+        const std::string boardBottom = "               ╚═════╩═════╩═════╝\n";
+        const std::string boardMiddle = "               ╠═════╬═════╬═════╣\n";
+        const std::string emptyCell = "   ";
+
+        // Colors
+        const std::string redColor = "\033[31m";
+        const std::string blueColor = "\033[34m";
+        const std::string colorReset = "\e[0m";
+
+        std::map<char, std::vector<std::string>> board_map = {
+            {'X', {"█ █", " █ ", "█ █"}},
+            {'O', {" █ ", "█ █", " █ "}},
+            {' ', {"   ", "   ", "   "}}};
+
+        printw("\n\n                 Player %c's turn\n\n", player);
+
+        for (int i = 0; i < 13; i++) {
+
+            if (i == 0)
+                printw("%s", boardTop.c_str());
+            else if (i == 12)
+                printw("%s", boardBottom.c_str());
+            else if (i % 4 == 0)
+                printw("%s", boardMiddle.c_str());
+            else {
+
+                for (int j = 0; j < 7; j++) {
+
+                    if (j == 0) {
+                        printw("               ║ ");
+                    } else if (j == 6) {
+                        printw(" ║\n");
+                    } else if (j % 2 == 0) {
+                        printw(" ║ ");
+                    } else {
+                        int row_index = (i - 1) / 4;
+                        int col_index = (j - 1) / 2;
+
+                        std::string color = redColor;
+
+                        std::vector<std::vector<char>> currentBoard = board.getBoard();
+
+                        if (row_index == currentPosition[0] && col_index == currentPosition[1]) {
+                            if (player == PLAYER_X) {
+                                attron(COLOR_PAIR(1));
+                                attron(A_BLINK);
+                                printw("%s", board_map[player][(i - 1) % 4].c_str());
+                                attroff(A_BLINK);
+                                attroff(COLOR_PAIR(1));
+                            } else if (player == PLAYER_O) {
+                                attron(COLOR_PAIR(2));
+                                attron(A_BLINK);
+                                printw("%s", board_map[player][(i - 1) % 4].c_str());
+                                attroff(A_BLINK);
+                                attroff(COLOR_PAIR(2));
+                            }
+                        } else if (currentBoard[row_index][col_index] != EMPTY) {
+                            if (currentBoard[row_index][col_index] == PLAYER_O) {
+                                attron(COLOR_PAIR(2));
+                                printw("%s", board_map[currentBoard[row_index][col_index]][(i - 1) % 4].c_str());
+                                attroff(COLOR_PAIR(2));
+                            } else if (currentBoard[row_index][col_index] == PLAYER_X) {
+                                attron(COLOR_PAIR(1));
+                                printw("%s", board_map[currentBoard[row_index][col_index]][(i - 1) % 4].c_str());
+                                attroff(COLOR_PAIR(1));
+                            }
+                        } else {
+                            printw("%s", emptyCell.c_str());
+                        }
+                    }
+                }
+            }
+        }
+
+        //-----------------------------------------------------------------------------------------------------
+        refresh();
+
+        int ch = getch(); // Wait for a key press
+
+        if (ch == '\n') {
             break;
+
+        } else if (ch == KEY_UP) {
+            newPosition = board.getMoveUp(currentPosition);
+            if (newPosition == invalidPosition) {
+                displayInvalidMove();
+            } else {
+                currentPosition = newPosition;
+            }
+
+        } else if (ch == KEY_DOWN) {
+            newPosition = board.getMoveDown(currentPosition);
+            if (newPosition == invalidPosition) {
+                displayInvalidMove();
+            } else {
+                currentPosition = newPosition;
+            }
+
+        } else if (ch == KEY_LEFT) {
+            newPosition = board.getMoveLeft(currentPosition);
+            if (newPosition == invalidPosition) {
+                displayInvalidMove();
+            } else {
+                currentPosition = newPosition;
+            }
+
+        } else if (ch == KEY_RIGHT) {
+            newPosition = board.getMoveRight(currentPosition);
+            if (newPosition == invalidPosition) {
+                displayInvalidMove();
+            } else {
+                currentPosition = newPosition;
+            }
         }
     }
+
+    return positions[currentPosition];
+}
+
+int Interface::playerTurn(char player, Board board) {
+    int position;
+
+    clear(); // Clear the screen
+
+    char input = playingBoard(player, board);
+
+    position = input - '0' + 48;
 
     return position;
 }
 
 void Interface::displayInvalidMove() {
-    std::cout << "\nInvalid move! Press ENTER to try again...\n";
-    std::cin.ignore().get();
+    printw("\n             Invalid move! Try again");
+    refresh();
+    getch(); // Wait for any key press
 }
 
 void Interface::displayWinMessage(char player) {
 
-    std::string color = "\033[91m";
-
-    if (player == 'O')
-        color = "\033[94m";
-
-    std::cout << "\n                 " << color << "╔══════════════╗\033[0m";
-    std::cout << "\n                 " << color << "║Player "<< player <<" wins!║\033[0m";
-    std::cout << "\n                 " << color << "╚══════════════╝\033[0m\n";
+    player == 'X' ? attron(COLOR_PAIR(1)) : attron(COLOR_PAIR(2)); // Turn on color pair 1 (red) or 2 (blue)
+    printw("\n                 ╔═════════════╗");
+    printw("\n                 ║Player %c wins║", player);
+    printw("\n                 ╚═════════════╝\n");
+    player == 'X' ? attroff(COLOR_PAIR(1)) : attroff(COLOR_PAIR(2)); // Turn off color pair 1 or 2
 }
 
 void Interface::displayDrawMessage() {
-    std::cout << "\n                  ╔════════════╗";
-    std::cout << "\n                  ║It's a draw!║";
-    std::cout << "\n                  ╚════════════╝\n";
+    printw("\n                  ╔═══════════╗");
+    printw("\n                  ║It's a draw║");
+    printw("\n                  ╚═══════════╝\n");
 }
 
 void Interface::displayExecutionTimes(std::vector<int> executionTimes) {
-    std::cout << "\n\033[92m          ╔════════════════════════════╗";
-    std::cout << "\n          ║Bot movement execution times║";
-    std::cout << "\n          ╠════════════════════════════╣\n";
+    attron(COLOR_PAIR(3)); // Turn on color pair 2 (green)
+    printw("\n          ╔════════════════════════════╗");
+    printw("\n          ║Bot movement execution times║");
+    printw("\n          ╠════════════════════════════╣\n");
     for (int i = 0; i < executionTimes.size(); i++) {
-        std::cout << "          ║" << std::right << std::setw(10) << executionTimes[i] << std::left << std::setw(18) << " microseconds" << "║\n";
+        printw("          ║%10d microseconds%5s║\n", executionTimes[i], "");
     }
-    std::cout << "          ╚════════════════════════════╝\033[0m\n";
-    displayGetBackToMenu();
+    printw("          ╚════════════════════════════╝\n");
+    attroff(COLOR_PAIR(3)); // Turn off color pair 2
 }
