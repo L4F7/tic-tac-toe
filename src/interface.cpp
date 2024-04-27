@@ -42,12 +42,16 @@ int Interface::menu() {
         if (ch == 'q' || ch == 'Q') {
             endwin(); // End ncurses
             return 4; // Exit the program
-        } else if (ch == KEY_UP) {
-            if (choice > 1) {
+        } else if (ch == KEY_UP || ch == 'w' || ch == 'W') {
+            if (choice == 1) {
+                choice = 4;
+            } else {
                 choice--;
             }
-        } else if (ch == KEY_DOWN) {
-            if (choice < 4) {
+        } else if (ch == KEY_DOWN || ch == 's' || ch == 'S') {
+            if (choice == 4) {
+                choice = 1;
+            } else {
                 choice++;
             }
         } else if (ch == '\n' && choice >= 1 && choice <= 4) {
@@ -101,12 +105,16 @@ int Interface::botMode() {
         if (ch == 'q' || ch == 'Q') {
             endwin(); // End ncurses
             return 4; // Exit the program
-        } else if (ch == KEY_UP) {
-            if (choice > 1) {
+        } else if (ch == KEY_UP || ch == 'w' || ch == 'W') {
+            if (choice == 1) {
+                choice = 3;
+            } else {
                 choice--;
             }
-        } else if (ch == KEY_DOWN) {
-            if (choice < 3) {
+        } else if (ch == KEY_DOWN || ch == 's' || ch == 'S') {
+            if (choice== 3) {
+                choice = 1;
+            } else {
                 choice++;
             }
         } else if (ch == '\n' && choice >= 1 && choice <= 3) {
@@ -122,12 +130,11 @@ void Interface::displayCredits() {
     printw("   - Luis Fuentes Fuentes\n");
     printw("   - Andres Gonzalez Romero\n");
     printw("   - Gerick Vargas Camacho\n");
-    displayGetBackToMenu();
 }
 
 void Interface::displayGoodbye() {
     clear();
-    std::cout << "\n    Goodbye. Thank you for playing!\n";
+    printw("\n    Goodbye. Thank you for playing!\n");
 }
 
 void Interface::displayBoard(Board board) {
@@ -142,11 +149,6 @@ void Interface::displayBoard(Board board) {
     const std::string boardBottom = "               ╚═════╩═════╩═════╝\n";
     const std::string boardMiddle = "               ╠═════╬═════╬═════╣\n";
     const std::string emptyCell = "   ";
-
-    // Colors
-    const std::string redColor = "\033[31m";
-    const std::string blueColor = "\033[34m";
-    const std::string colorReset = "\e[0m";
 
     std::map<char, std::vector<std::string>> board_map = {
         {'X', {"█ █", " █ ", "█ █"}},
@@ -174,8 +176,6 @@ void Interface::displayBoard(Board board) {
                 } else {
                     int row_index = (i - 1) / 4;
                     int col_index = (j - 1) / 2;
-
-                    std::string color = redColor;
 
                     std::vector<std::vector<char>> currentBoard = board.getBoard();
 
@@ -231,11 +231,6 @@ int Interface::playingBoard(char player, Board board) {
         const std::string boardMiddle = "               ╠═════╬═════╬═════╣\n";
         const std::string emptyCell = "   ";
 
-        // Colors
-        const std::string redColor = "\033[31m";
-        const std::string blueColor = "\033[34m";
-        const std::string colorReset = "\e[0m";
-
         std::map<char, std::vector<std::string>> board_map = {
             {'X', {"█ █", " █ ", "█ █"}},
             {'O', {" █ ", "█ █", " █ "}},
@@ -264,8 +259,6 @@ int Interface::playingBoard(char player, Board board) {
                     } else {
                         int row_index = (i - 1) / 4;
                         int col_index = (j - 1) / 2;
-
-                        std::string color = redColor;
 
                         std::vector<std::vector<char>> currentBoard = board.getBoard();
 
@@ -308,8 +301,7 @@ int Interface::playingBoard(char player, Board board) {
 
         if (ch == '\n') {
             break;
-
-        } else if (ch == KEY_UP) {
+        } else if (ch == KEY_UP || ch == 'w' || ch == 'W') {
             newPosition = board.getMoveUp(currentPosition);
             if (newPosition == invalidPosition) {
                 displayInvalidMove();
@@ -317,7 +309,7 @@ int Interface::playingBoard(char player, Board board) {
                 currentPosition = newPosition;
             }
 
-        } else if (ch == KEY_DOWN) {
+        } else if (ch == KEY_DOWN || ch == 's' || ch == 'S') {
             newPosition = board.getMoveDown(currentPosition);
             if (newPosition == invalidPosition) {
                 displayInvalidMove();
@@ -325,7 +317,7 @@ int Interface::playingBoard(char player, Board board) {
                 currentPosition = newPosition;
             }
 
-        } else if (ch == KEY_LEFT) {
+        } else if (ch == KEY_LEFT || ch == 'a' || ch == 'A') {
             newPosition = board.getMoveLeft(currentPosition);
             if (newPosition == invalidPosition) {
                 displayInvalidMove();
@@ -333,7 +325,7 @@ int Interface::playingBoard(char player, Board board) {
                 currentPosition = newPosition;
             }
 
-        } else if (ch == KEY_RIGHT) {
+        } else if (ch == KEY_RIGHT || ch == 'd' || ch == 'D') {
             newPosition = board.getMoveRight(currentPosition);
             if (newPosition == invalidPosition) {
                 displayInvalidMove();

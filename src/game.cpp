@@ -22,22 +22,22 @@ void Game::start() {
     
     setlocale(LC_ALL, "");
 
-    initscr(); // Initialize ncurses
+    initscr(); // Initialize ncurse
     raw(); // Disable line buffering
     keypad(stdscr, TRUE); // Enable keypad for arrow keys
 
+    use_default_colors(); // Use default colors
     start_color(); // Start color mode
-    init_pair(1, COLOR_RED, COLOR_BLACK); // Define color pair 1 (red)
-    init_pair(2, COLOR_BLUE, COLOR_BLACK); // Define color pair 2 (blue)
-    init_pair(3, COLOR_GREEN, COLOR_BLACK); // Define color pair 2 (green)
-    init_pair(4, COLOR_WHITE, COLOR_BLACK); // Define color pair 2 (yellow)
-
+    init_pair(1, COLOR_RED, -1); // Define color pair 1 (red)
+    init_pair(2, COLOR_BLUE, -1); // Define color pair 2 (blue)
+    init_pair(3, COLOR_GREEN, -1); // Define color pair 2 (green)
 
     while (true) {
         int option = interface.menu();
 
         if (option == 1) {
             playerVsPlayer();
+            interface.displayGetBackToMenu();
         }
 
         if (option == 2) {
@@ -45,10 +45,12 @@ void Game::start() {
             if (mode == 3)
                 continue; // If the user goes back to the main menu
             playerVsBot(mode);
+            interface.displayGetBackToMenu();
         }
 
         if (option == 3) {
             interface.displayCredits();
+            interface.displayGetBackToMenu();
         }
 
         if (option == 4) {
@@ -59,8 +61,8 @@ void Game::start() {
     
     refresh(); // Refresh the screen
     endwin(); // End ncurses
-    
-    system("clear");
+
+    system("clear"); // Clear the terminal
 
 }
 bool Game::checkWinOrDraw(Board board) {
@@ -110,7 +112,6 @@ void Game::playerVsPlayer() {
             break;
     }
 
-    interface.displayGetBackToMenu();
 }
 
 void Game::playerVsBot(int mode) {
@@ -161,5 +162,4 @@ void Game::playerVsBot(int mode) {
 
     interface.displayExecutionTimes(executionTimes);
 
-    interface.displayGetBackToMenu();
 }

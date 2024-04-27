@@ -1,9 +1,7 @@
 #ifndef INTERFACE_H
 #define INTERFACE_H
 
-#include <iomanip>
 #include <iostream>
-#include <limits>
 #include <map>
 #include <ncurses.h>
 #include <vector>
