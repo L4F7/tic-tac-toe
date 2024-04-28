@@ -10,12 +10,22 @@ int Interface::menu() {
 
     while (true) {
         clear(); // Clear the screen
-        printw(" \n      Tic Tac Toe Game\n\n");
+        
+        attron(A_BOLD); // Bold text
+        printw("\n _________  ___  ________               _________  ________  ________               _________  ________  _______");
+        printw("\n|\\___   ___\\\\  \\|\\   ____\\             |\\___   ___\\\\   __  \\|\\   ____\\             |\\___   ___\\\\   __  \\|\\   ___\\");
+        printw("\n\\|___ \\  \\_\\ \\  \\ \\  \\___|  ___________\\|___ \\  \\_\\ \\  \\|\\  \\ \\  \\___|  ___________\\|___ \\  \\_\\ \\  \\|\\  \\ \\  \\___");
+        printw("\n     \\ \\  \\ \\ \\  \\ \\  \\    |\\____________\\  \\ \\  \\ \\ \\   __  \\ \\  \\    |\\____________\\  \\ \\  \\ \\ \\  \\\\\\  \\ \\   ___\\");
+        printw("\n      \\ \\  \\ \\ \\  \\ \\  \\___\\|____________|   \\ \\  \\ \\ \\  \\ \\  \\ \\  \\___\\|____________|   \\ \\  \\ \\ \\  \\\\\\  \\ \\  \\___");
+        printw("\n       \\ \\__\\ \\ \\__\\ \\_______\\                \\ \\__\\ \\ \\__\\ \\__\\ \\_______\\                \\ \\__\\ \\ \\_______\\ \\______\\");
+        printw("\n        \\|__|  \\|__|\\|_______|                 \\|__|  \\|__|\\|__|\\|_______|                 \\|__|  \\|_______|\\|______|\n\n\n");
+        attroff(A_BOLD); // Turn off bold text
+
         // Print options
         for (int i = 1; i <= 4; ++i) {
             printw("      ");
             if (i == choice) {
-                printw(" ");
+                printw("=> ");
                 attron(A_REVERSE); // Highlight current option
             }
             switch (i) {
@@ -79,7 +89,7 @@ int Interface::botMode() {
         for (int i = 1; i <= 3; ++i) {
             printw("      ");
             if (i == choice) {
-                printw(" ");
+                printw("=> ");
                 attron(A_REVERSE); // Highlight current option
             }
             switch (i) {
@@ -145,7 +155,7 @@ void Interface::displayBoard(Board board) {
     const char PLAYER_O = 'O';
 
     // Board
-    const std::string boardTop = "\n\n               ╔═════╦═════╦═════╗\n";
+    const std::string boardTop = "\n\n\n\n               ╔═════╦═════╦═════╗\n";
     const std::string boardBottom = "               ╚═════╩═════╩═════╝\n";
     const std::string boardMiddle = "               ╠═════╬═════╬═════╣\n";
     const std::string emptyCell = "   ";
