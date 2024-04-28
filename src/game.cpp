@@ -33,7 +33,10 @@ void Game::start() {
     init_pair(3, COLOR_GREEN, -1); // Define color pair 2 (green)
 
     while (true) {
+
+        attron(COLOR_PAIR(3)); // Set color pair 3 (green)
         int option = interface.menu();
+        attroff(COLOR_PAIR(3)); // Reset color pair
 
         if (option == 1) {
             playerVsPlayer();
@@ -41,7 +44,9 @@ void Game::start() {
         }
 
         if (option == 2) {
+            attron(COLOR_PAIR(3)); // Set color pair 3 (green)
             int mode = interface.botMode();
+            attroff(COLOR_PAIR(3)); // Reset color pair
             if (mode == 3)
                 continue; // If the user goes back to the main menu
             playerVsBot(mode);
@@ -49,8 +54,10 @@ void Game::start() {
         }
 
         if (option == 3) {
+            attron(COLOR_PAIR(3)); // Set color pair 3 (green)
             interface.displayCredits();
             interface.displayGetBackToMenu();
+            attroff(COLOR_PAIR(3)); // Reset color pair
         }
 
         if (option == 4) {
