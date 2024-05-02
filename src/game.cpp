@@ -119,6 +119,8 @@ void Game::runSimulateGamesMenu() {
     simulateGames(numberOfGames, 0);
     simulateGames(numberOfGames, 1);
 
+    flushinp(); // Flush input buffer
+
     attron(COLOR_PAIR(3));    // Set color pair 3 (green)
     interface.displayStats(); // Display stats
     interface.displayGetBackToMenu();
