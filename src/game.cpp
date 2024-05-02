@@ -86,10 +86,12 @@ void Game::runBotMenu() {
 
         if (botMenuChoice == 1) {
             playerVsBot(0, false); // Non-threaded
+            interface.displayGetBackToMenu();
         }
 
         if (botMenuChoice == 2) {
             playerVsBot(1, false); // Threaded
+            interface.displayGetBackToMenu();
         }
 
         if (botMenuChoice == 3) {

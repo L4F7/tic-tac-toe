@@ -15,6 +15,7 @@ class Interface {
 public:
     Interface();
     ~Interface();
+    void displayMenuAsciiArt();
     int menu();
     void displayGetBackToMenu();
     int botMenu();

@@ -4,6 +4,18 @@ Interface::Interface() {}
 
 Interface::~Interface() {}
 
+void Interface::displayMenuAsciiArt() {
+    attron(A_BOLD); // Bold text
+    printw("\n");
+    printw("%5s _______ _____ _____   _______       _____   _______ ____  ______ \n", "");
+    printw("%5s|__   __|_   _/ ____| |__   __|/\\   / ____| |__   __/ __ \\|  ____|\n", "");
+    printw("%5s   | |    | || |   ______| |  /  \\ | |   ______| | | |  | | |__   \n", "");
+    printw("%5s   | |    | || |  |______| | / /\\ \\| |  |______| | | |  | |  __|  \n", "");
+    printw("%5s   | |   _| || |____     | |/ ____ \\ |____     | | | |__| | |____ \n", "");
+    printw("%5s   |_|  |_____\\_____|    |_/_/    \\_\\_____|    |_|  \\____/|______|\n\n\n", "");
+    attroff(A_BOLD); // Turn off bold text
+}
+
 int Interface::menu() {
 
     int choice = 1; // Initially selected option
@@ -11,17 +23,11 @@ int Interface::menu() {
     while (true) {
         clear(); // Clear the screen
 
-        attron(A_BOLD); // Bold text
-        printw("\n _________  ___  ________               _________  ________  ________               _________  ________  _______");
-        printw("\n|\\___   ___\\\\  \\|\\   ____\\             |\\___   ___\\\\   __  \\|\\   ____\\             |\\___   ___\\\\   __  \\|\\   ___\\");
-        printw("\n\\|___ \\  \\_\\ \\  \\ \\  \\___|  ___________\\|___ \\  \\_\\ \\  \\|\\  \\ \\  \\___|  ___________\\|___ \\  \\_\\ \\  \\|\\  \\ \\  \\___");
-        printw("\n     \\ \\  \\ \\ \\  \\ \\  \\    |\\____________\\  \\ \\  \\ \\ \\   __  \\ \\  \\    |\\____________\\  \\ \\  \\ \\ \\  \\\\\\  \\ \\   ___\\");
-        printw("\n      \\ \\  \\ \\ \\  \\ \\  \\___\\|____________|   \\ \\  \\ \\ \\  \\ \\  \\ \\  \\___\\|____________|   \\ \\  \\ \\ \\  \\\\\\  \\ \\  \\___");
-        printw("\n       \\ \\__\\ \\ \\__\\ \\_______\\                \\ \\__\\ \\ \\__\\ \\__\\ \\_______\\                \\ \\__\\ \\ \\_______\\ \\______\\");
-        printw("\n        \\|__|  \\|__|\\|_______|                 \\|__|  \\|__|\\|__|\\|_______|                 \\|__|  \\|_______|\\|______|\n\n\n");
-        attroff(A_BOLD); // Turn off bold text
+        displayMenuAsciiArt();
 
         int numberOfChoices = 4;
+
+        printw("    Use the arrow keys to navigate the menu\n\n");
 
         // Print options
         for (int i = 1; i <= numberOfChoices; ++i) {
@@ -74,7 +80,9 @@ int Interface::menu() {
 }
 
 void Interface::displayGetBackToMenu() {
+    attron(COLOR_PAIR(3)); // Turn on color pair 3 (green)
     printw("\n Press ANY KEY to go back to the menu...");
+    attroff(COLOR_PAIR(3)); // Turn off color pair 3
     refresh();
     getch(); // Wait for any key press
 }
@@ -87,7 +95,10 @@ int Interface::botMenu() {
 
     while (true) {
         clear(); // Clear the screen
-        printw(" \n    Choose Bot Difficulty\n\n");
+
+        displayMenuAsciiArt();
+
+        printw("    Choose Bot Difficulty\n\n");
         // Print options
         for (int i = 1; i <= numberOfChoices; ++i) {
             printw("      ");
@@ -138,7 +149,6 @@ int Interface::botMenu() {
     }
 }
 
-
 int Interface::simulateGamesMenu() {
 
     int choice = 1; // Initially selected option
@@ -153,6 +163,9 @@ int Interface::simulateGamesMenu() {
 
     while (true) {
         clear(); // Clear the screen
+
+        displayMenuAsciiArt();
+
         printw(" \n    Choose the number of games to simulate\n\n");
         // Print options
         for (int i = 1; i <= numberOfChoices; ++i) {
@@ -200,11 +213,13 @@ int Interface::simulateGamesMenu() {
             return choices[choice]; // Return the selected option
         }
     }
-
 }
 
 void Interface::displayCredits() {
     clear();
+
+    displayMenuAsciiArt();
+
     printw("\n Developed by: \n\n");
     printw("   - Luis Fuentes Fuentes\n");
     printw("   - Andres Gonzalez Romero\n");
@@ -217,6 +232,10 @@ void Interface::displayGoodbye() {
 }
 
 void Interface::displayBoard(Board board) {
+
+    attron(COLOR_PAIR(3)); // Turn on color pair 3 (green)
+    displayMenuAsciiArt();
+    attroff(COLOR_PAIR(3)); // Turn off color pair 3
 
     // Constants
     const char EMPTY = ' ';
@@ -236,22 +255,34 @@ void Interface::displayBoard(Board board) {
 
     for (int i = 0; i < 13; i++) {
 
-        if (i == 0)
+        if (i == 0) {
+            attron(COLOR_PAIR(3)); // Turn on color pair 3 (green)
             printw("%s", boardTop.c_str());
-        else if (i == 12)
+            attroff(COLOR_PAIR(3)); // Turn off color pair 3
+        } else if (i == 12) {
+            attron(COLOR_PAIR(3)); // Turn on color pair 3 (green)
             printw("%s", boardBottom.c_str());
-        else if (i % 4 == 0)
+            attroff(COLOR_PAIR(3)); // Turn off color pair 3
+        } else if (i % 4 == 0) {
+            attron(COLOR_PAIR(3)); // Turn on color pair 3 (green)
             printw("%s", boardMiddle.c_str());
-        else {
+            attroff(COLOR_PAIR(3)); // Turn off color pair 3
+        } else {
 
             for (int j = 0; j < 7; j++) {
 
                 if (j == 0) {
+                    attron(COLOR_PAIR(3)); // Turn on color pair 3 (green)
                     printw("               ║ ");
+                    attroff(COLOR_PAIR(3)); // Turn off color pair 3
                 } else if (j == 6) {
+                    attron(COLOR_PAIR(3)); // Turn on color pair 3 (green)
                     printw(" ║\n");
+                    attroff(COLOR_PAIR(3)); // Turn off color pair 3
                 } else if (j % 2 == 0) {
+                    attron(COLOR_PAIR(3)); // Turn on color pair 3 (green)
                     printw(" ║ ");
+                    attroff(COLOR_PAIR(3)); // Turn off color pair 3
                 } else {
                     int row_index = (i - 1) / 4;
                     int col_index = (j - 1) / 2;
@@ -297,6 +328,12 @@ int Interface::playingBoard(char player, Board board) {
     while (true) {
         clear(); // Clear the screen
 
+        attron(COLOR_PAIR(3)); // Turn on color pair 3 (green)
+        displayMenuAsciiArt();
+
+        printw("    Use the arrow keys to navigate the board\n\n");
+        attroff(COLOR_PAIR(3)); // Turn off color pair 3
+
         //-----------------------------------------------------------------------------------------------------
 
         // Constants
@@ -315,26 +352,40 @@ int Interface::playingBoard(char player, Board board) {
             {'O', {" █ ", "█ █", " █ "}},
             {' ', {"   ", "   ", "   "}}};
 
+        attron(COLOR_PAIR(3)); // Turn on color pair 3 (green)
         printw("\n\n                 Player %c's turn\n\n", player);
+        attroff(COLOR_PAIR(3)); // Turn off color pair 3
 
         for (int i = 0; i < 13; i++) {
 
-            if (i == 0)
+            if (i == 0) {
+                attron(COLOR_PAIR(3)); // Turn on color pair 3 (green)
                 printw("%s", boardTop.c_str());
-            else if (i == 12)
+                attroff(COLOR_PAIR(3)); // Turn off color pair 3
+            } else if (i == 12) {
+                attron(COLOR_PAIR(3)); // Turn on color pair 3 (green)
                 printw("%s", boardBottom.c_str());
-            else if (i % 4 == 0)
+                attroff(COLOR_PAIR(3)); // Turn off color pair 3
+            } else if (i % 4 == 0) {
+                attron(COLOR_PAIR(3)); // Turn on color pair 3 (green)
                 printw("%s", boardMiddle.c_str());
-            else {
+                attroff(COLOR_PAIR(3)); // Turn off color pair 3
+            } else {
 
                 for (int j = 0; j < 7; j++) {
 
                     if (j == 0) {
+                        attron(COLOR_PAIR(3)); // Turn on color pair 3 (green)
                         printw("               ║ ");
+                        attroff(COLOR_PAIR(3)); // Turn off color pair 3
                     } else if (j == 6) {
+                        attron(COLOR_PAIR(3)); // Turn on color pair 3 (green)
                         printw(" ║\n");
+                        attroff(COLOR_PAIR(3)); // Turn off color pair 3
                     } else if (j % 2 == 0) {
+                        attron(COLOR_PAIR(3)); // Turn on color pair 3 (green)
                         printw(" ║ ");
+                        attroff(COLOR_PAIR(3)); // Turn off color pair 3
                     } else {
                         int row_index = (i - 1) / 4;
                         int col_index = (j - 1) / 2;
@@ -345,7 +396,9 @@ int Interface::playingBoard(char player, Board board) {
                             if (player == PLAYER_X) {
                                 attron(COLOR_PAIR(1));
                                 attron(A_BLINK);
+                                attron(A_BOLD);
                                 printw("%s", board_map[player][(i - 1) % 4].c_str());
+                                attroff(A_BOLD);
                                 attroff(A_BLINK);
                                 attroff(COLOR_PAIR(1));
                             } else if (player == PLAYER_O) {
@@ -445,9 +498,12 @@ void Interface::displayWinMessage(char player) {
 }
 
 void Interface::displayDrawMessage() {
+    
+    attron(COLOR_PAIR(3)); // Turn on color pair 3 (green)
     printw("\n                  ╔═══════════╗");
     printw("\n                  ║It's a draw║");
     printw("\n                  ╚═══════════╝\n");
+    attroff(COLOR_PAIR(3)); // Turn off color pair 3
 }
 
 void Interface::displayExecutionTimes(std::vector<std::pair<int, int>> executionTimes) {
@@ -503,38 +559,37 @@ void Interface::displayStats() {
     displayExecutionTimesBarChart(averageExecutionTimes);
 
     printw("\n\n");
-    printw("%9sThe average execution time of the non-threaded version is ", ""); 
+    printw("%9sThe average execution time of the non-threaded version is ", "");
     attron(A_UNDERLINE); // Underline text
-    attron(A_BOLD); // Bold text
+    attron(A_BOLD);      // Bold text
     printw("%.2f", nonThreadedAverage);
-    attroff(A_BOLD); // Turn off bold text
+    attroff(A_BOLD);      // Turn off bold text
     attroff(A_UNDERLINE); // Turn off underline text
     printw(" microseconds.\n");
 
     printw("%9sThe average execution time of the threaded version is ", "");
     attron(A_UNDERLINE); // Underline text
-    attron(A_BOLD); // Bold text
+    attron(A_BOLD);      // Bold text
     printw("%.2f", threadedAverage);
-    attroff(A_BOLD); // Turn off bold text
+    attroff(A_BOLD);      // Turn off bold text
     attroff(A_UNDERLINE); // Turn off underline text
 
     printw(" microseconds.\n");
 
     printw("%9sThe threaded version achieves a speedup of ", "");
     attron(A_UNDERLINE); // Underline text
-    attron(A_BOLD); // Bold text
+    attron(A_BOLD);      // Bold text
     printw("%.2f%%", efficiency);
-    attroff(A_BOLD); // Turn off bold text
+    attroff(A_BOLD);      // Turn off bold text
     attroff(A_UNDERLINE); // Turn off underline text
     printw(".\n\n");
 
-    printw("%9s» Efficiency is an important metric to consider when evaluating the performance\n", ""); 
+    printw("%9s» Efficiency is an important metric to consider when evaluating the performance\n", "");
     printw("%9s  of different implementations.\n", "");
-    printw("%9s» A higher efficiency indicates that the threaded version is able to perform the\n", ""); 
+    printw("%9s» A higher efficiency indicates that the threaded version is able to perform the\n", "");
     printw("%9s  same task in less time compared to the non-threaded version.\n", "");
-    printw("%9s» This can be beneficial in scenarios where performance is critical, such as\n", ""); 
+    printw("%9s» This can be beneficial in scenarios where performance is critical, such as\n", "");
     printw("%9s  real-time systems or computationally intensive tasks.\n", "");
-        
 
     refresh();
 }
@@ -558,9 +613,8 @@ void Interface::displayExecutionTimesBarChart(std::vector<std::pair<int, int>> a
     attron(A_UNDERLINE); // Underline text
     attron(A_BOLD);      // Bold text
     printw("Execution times bar chart (in microseconds)\n\n");
-    attroff(A_BOLD); // Turn off bold text
+    attroff(A_BOLD);      // Turn off bold text
     attroff(A_UNDERLINE); // Turn off underline text
-
 
     printw("%15s │\n", "");
     for (int i = maxRounded; i > 0; i -= rounder) {
@@ -596,14 +650,14 @@ void Interface::displayExecutionTimesBarChart(std::vector<std::pair<int, int>> a
 void Interface::displayLoading() {
     clear();
 
-    printw("%5s  _                     _ _                    \n", "");
-    printw("%5s | |                   | (_)                   \n", "");
-    printw("%5s | |     ___   __ _  __| |_ _ __   __ _        \n", "");
-    printw("%5s | |    / _ \\ / _` |/ _` | | '_ \\ / _` |       \n", "");
-    printw("%5s | |___| (_) | (_| | (_| | | | | | (_| |_ _ _  \n", "");
-    printw("%5s |______\\___/ \\__,_|\\__,_|_|_| |_|\\__, (_|_|_) \n", "");
-    printw("%5s                                   __/ |       \n", "");
-    printw("%5s                                  |___/        \n", "");
+    printw("%5s _                     _ _                   \n", "");
+    printw("%5s| |                   | (_)                  \n", "");
+    printw("%5s| |     ___   __ _  __| |_ _ __   __ _       \n", "");
+    printw("%5s| |    / _ \\ / _` |/ _` | | '_ \\ / _` |      \n", "");
+    printw("%5s| |___| (_) | (_| | (_| | | | | | (_| |_ _ _ \n", "");
+    printw("%5s|______\\___/ \\__,_|\\__,_|_|_| |_|\\__, (_|_|_)\n", "");
+    printw("%5s                                  __/ |      \n", "");
+    printw("%5s                                 |___/       \n", "");
 
     refresh();
 }
