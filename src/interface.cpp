@@ -10,7 +10,7 @@ int Interface::menu() {
 
     while (true) {
         clear(); // Clear the screen
-        
+
         attron(A_BOLD); // Bold text
         printw("\n _________  ___  ________               _________  ________  ________               _________  ________  _______");
         printw("\n|\\___   ___\\\\  \\|\\   ____\\             |\\___   ___\\\\   __  \\|\\   ____\\             |\\___   ___\\\\   __  \\|\\   ___\\");
@@ -21,8 +21,10 @@ int Interface::menu() {
         printw("\n        \\|__|  \\|__|\\|_______|                 \\|__|  \\|__|\\|__|\\|_______|                 \\|__|  \\|_______|\\|______|\n\n\n");
         attroff(A_BOLD); // Turn off bold text
 
+        int numberOfChoices = 4;
+
         // Print options
-        for (int i = 1; i <= 4; ++i) {
+        for (int i = 1; i <= numberOfChoices; ++i) {
             printw("      ");
             if (i == choice) {
                 printw("=> ");
@@ -50,21 +52,20 @@ int Interface::menu() {
         int ch = getch(); // Wait for a key press
 
         if (ch == 'q' || ch == 'Q') {
-            endwin(); // End ncurses
-            return 4; // Exit the program
+            return numberOfChoices; // Exit the program
         } else if (ch == KEY_UP || ch == 'w' || ch == 'W') {
             if (choice == 1) {
-                choice = 4;
+                choice = numberOfChoices;
             } else {
                 choice--;
             }
         } else if (ch == KEY_DOWN || ch == 's' || ch == 'S') {
-            if (choice == 4) {
+            if (choice == numberOfChoices) {
                 choice = 1;
             } else {
                 choice++;
             }
-        } else if (ch == '\n' && choice >= 1 && choice <= 4) {
+        } else if (ch == '\n' && choice >= 1 && choice <= numberOfChoices) {
             return choice; // Return the selected option
         }
 
@@ -73,20 +74,22 @@ int Interface::menu() {
 }
 
 void Interface::displayGetBackToMenu() {
-    printw("\n Press ANY KEY to go back to the main menu...");
+    printw("\n Press ANY KEY to go back to the menu...");
     refresh();
     getch(); // Wait for any key press
 }
 
-int Interface::botMode() {
+int Interface::botMenu() {
 
     int choice = 1; // Initially selected option
+
+    const int numberOfChoices = 4;
 
     while (true) {
         clear(); // Clear the screen
         printw(" \n    Choose Bot Difficulty\n\n");
         // Print options
-        for (int i = 1; i <= 3; ++i) {
+        for (int i = 1; i <= numberOfChoices; ++i) {
             printw("      ");
             if (i == choice) {
                 printw("=> ");
@@ -100,6 +103,9 @@ int Interface::botMode() {
                 printw("Impossible Threaded\n");
                 break;
             case 3:
+                printw("Generate Stadistics\n");
+                break;
+            case 4:
                 printw("Go back\n");
                 break;
             }
@@ -113,25 +119,88 @@ int Interface::botMode() {
         int ch = getch(); // Wait for a key press
 
         if (ch == 'q' || ch == 'Q') {
-            endwin(); // End ncurses
             return 4; // Exit the program
         } else if (ch == KEY_UP || ch == 'w' || ch == 'W') {
             if (choice == 1) {
-                choice = 3;
+                choice = numberOfChoices;
             } else {
                 choice--;
             }
         } else if (ch == KEY_DOWN || ch == 's' || ch == 'S') {
-            if (choice== 3) {
+            if (choice == numberOfChoices) {
                 choice = 1;
             } else {
                 choice++;
             }
-        } else if (ch == '\n' && choice >= 1 && choice <= 3) {
-            endwin();      // End ncurses
+        } else if (ch == '\n' && choice >= 1 && choice <= numberOfChoices) {
             return choice; // Return the selected option
         }
     }
+}
+
+
+int Interface::simulateGamesMenu() {
+
+    int choice = 1; // Initially selected option
+
+    const int numberOfChoices = 4;
+
+    std::map<int, int> choices = {
+        {1, 5},
+        {2, 10},
+        {3, 15},
+        {4, 0}};
+
+    while (true) {
+        clear(); // Clear the screen
+        printw(" \n    Choose the number of games to simulate\n\n");
+        // Print options
+        for (int i = 1; i <= numberOfChoices; ++i) {
+            printw("      ");
+            if (i == choice) {
+                printw("=> ");
+                attron(A_REVERSE); // Highlight current option
+            }
+            switch (i) {
+            case 1:
+                printw("5 game\n");
+                break;
+            case 2:
+                printw("10 games\n");
+                break;
+            case 3:
+                printw("15 games\n");
+                break;
+            case 4:
+                printw("Go back\n");
+                break;
+            }
+            if (i == choice) {
+                attroff(A_REVERSE); // Turn off highlighting
+            }
+        }
+
+        refresh();
+
+        int ch = getch(); // Wait for a key press
+
+        if (ch == KEY_UP || ch == 'w' || ch == 'W') {
+            if (choice == 1) {
+                choice = numberOfChoices;
+            } else {
+                choice--;
+            }
+        } else if (ch == KEY_DOWN || ch == 's' || ch == 'S') {
+            if (choice == numberOfChoices) {
+                choice = 1;
+            } else {
+                choice++;
+            }
+        } else if (ch == '\n' && choice >= 1 && choice <= numberOfChoices) {
+            return choices[choice]; // Return the selected option
+        }
+    }
+
 }
 
 void Interface::displayCredits() {
@@ -381,14 +450,160 @@ void Interface::displayDrawMessage() {
     printw("\n                  ╚═══════════╝\n");
 }
 
-void Interface::displayExecutionTimes(std::vector<int> executionTimes) {
+void Interface::displayExecutionTimes(std::vector<std::pair<int, int>> executionTimes) {
     attron(COLOR_PAIR(3)); // Turn on color pair 2 (green)
     printw("\n          ╔════════════════════════════╗");
     printw("\n          ║Bot movement execution times║");
     printw("\n          ╠════════════════════════════╣\n");
-    for (int i = 0; i < executionTimes.size(); i++) {
-        printw("          ║%10d microseconds%5s║\n", executionTimes[i], "");
+    for (const auto &[_, executionTimes] : executionTimes) {
+        printw("          ║%10d microseconds%5s║\n", executionTimes, "");
     }
     printw("          ╚════════════════════════════╝\n");
     attroff(COLOR_PAIR(3)); // Turn off color pair 2
+}
+
+void Interface::displayStats() {
+
+    clear(); // Clear the screen
+
+    FileManager fileManager;
+
+    std::vector<std::pair<int, int>> executionTimes = fileManager.readExecutionTimes("../executionTimes.csv");
+
+    if (executionTimes.empty()) {
+        printw(" NO STATS AVAILABLE\n");
+        refresh();
+        return;
+    }
+
+    int totalThreaded = 0;
+    int totalNonThreaded = 0;
+    double threadedAverage = 0;
+    double nonThreadedAverage = 0;
+
+    for (const auto &[mode, time] : executionTimes) {
+        if (mode == 0) {
+            totalNonThreaded++;
+            nonThreadedAverage += time;
+        } else {
+            totalThreaded++;
+            threadedAverage += time;
+        }
+    }
+
+    nonThreadedAverage /= totalNonThreaded;
+    threadedAverage /= totalThreaded;
+
+    double efficiency = (1 - (threadedAverage / nonThreadedAverage)) * 100;
+
+    std::vector<std::pair<int, int>> averageExecutionTimes = {
+        {0, nonThreadedAverage},
+        {1, threadedAverage}};
+
+    displayExecutionTimesBarChart(averageExecutionTimes);
+
+    printw("\n\n");
+    printw("%9sThe average execution time of the non-threaded version is ", ""); 
+    attron(A_UNDERLINE); // Underline text
+    attron(A_BOLD); // Bold text
+    printw("%.2f", nonThreadedAverage);
+    attroff(A_BOLD); // Turn off bold text
+    attroff(A_UNDERLINE); // Turn off underline text
+    printw(" microseconds.\n");
+
+    printw("%9sThe average execution time of the threaded version is ", "");
+    attron(A_UNDERLINE); // Underline text
+    attron(A_BOLD); // Bold text
+    printw("%.2f", threadedAverage);
+    attroff(A_BOLD); // Turn off bold text
+    attroff(A_UNDERLINE); // Turn off underline text
+
+    printw(" microseconds.\n");
+
+    printw("%9sThe threaded version achieves a speedup of ", "");
+    attron(A_UNDERLINE); // Underline text
+    attron(A_BOLD); // Bold text
+    printw("%.2f%%", efficiency);
+    attroff(A_BOLD); // Turn off bold text
+    attroff(A_UNDERLINE); // Turn off underline text
+    printw(".\n\n");
+
+    printw("%9s» Efficiency is an important metric to consider when evaluating the performance\n", ""); 
+    printw("%9s  of different implementations.\n", "");
+    printw("%9s» A higher efficiency indicates that the threaded version is able to perform the\n", ""); 
+    printw("%9s  same task in less time compared to the non-threaded version.\n", "");
+    printw("%9s» This can be beneficial in scenarios where performance is critical, such as\n", ""); 
+    printw("%9s  real-time systems or computationally intensive tasks.\n", "");
+        
+
+    refresh();
+}
+
+void Interface::displayExecutionTimesBarChart(std::vector<std::pair<int, int>> averageExecutionTimes) {
+
+    int nonThreaded = averageExecutionTimes[0].second;
+    int threaded = averageExecutionTimes[1].second;
+
+    int max = round(std::max(nonThreaded, threaded));
+    int min = round(std::min(nonThreaded, threaded));
+
+    int rounder = 500;
+
+    int maxRounded = round(max / rounder) * rounder;
+    int minRounded = round(min / rounder) * rounder;
+
+    int midRounded = round((max - min) / rounder) * rounder;
+
+    printw("\n\n%9s", "");
+    attron(A_UNDERLINE); // Underline text
+    attron(A_BOLD);      // Bold text
+    printw("Execution times bar chart (in microseconds)\n\n");
+    attroff(A_BOLD); // Turn off bold text
+    attroff(A_UNDERLINE); // Turn off underline text
+
+
+    printw("%15s │\n", "");
+    for (int i = maxRounded; i > 0; i -= rounder) {
+        if (maxRounded == i) {
+            printw("%15d │-----┌──────┐--------------------\n", max);
+        } else if (minRounded == i) {
+            printw("%15d │-----│░▒▓▓▒░│--------┌──────┐----\n", min);
+        } else if (min > i) {
+            printw("%15s │     │░▒▓▓▒░│        │░▒▓▓▒░│    \n", "");
+        } else if (midRounded == i) {
+            printw("%15d │     │░▒▓▓▒░│                    \n", i);
+        } else {
+            printw("%15s │     │░▒▓▓▒░│                    \n", "");
+        }
+    }
+    printw("%15d └─────┴──────┴────────┴──────┴────\n", 0);
+    printw("%15s     Non-threaded      Threaded    \n", "");
+
+    // printw("%8s │                                 \n", "");
+    // printw("%8d │-----┌──────┐--------------------\n", max);
+    // printw("%8s │     │      │                    \n", "");
+    // printw("%8s │     │      │                    \n", "");
+    // printw("%8s │     │      │                    \n", "");
+    // printw("%8d │-----│      │--------┌──────┐----\n", min);
+    // printw("%8s │     │      │        │      │    \n", "");
+    // printw("%8s │     │      │        │      │    \n", "");
+    // printw("%8s │     │      │        │      │    \n", "");
+    // printw("%8s │     │      │        │      │    \n", "");
+    // printw("%8s └─────┴──────┴────────┴──────┴────\n", "");
+    // printw("%8s     Non-threaded      Threaded    \n", "");
+}
+
+void Interface::displayLoading() {
+    clear();
+
+    printw("%5s  _                     _ _                    \n", "");
+    printw("%5s | |                   | (_)                   \n", "");
+    printw("%5s | |     ___   __ _  __| |_ _ __   __ _        \n", "");
+    printw("%5s | |    / _ \\ / _` |/ _` | | '_ \\ / _` |       \n", "");
+    printw("%5s | |___| (_) | (_| | (_| | | | | | (_| |_ _ _  \n", "");
+    printw("%5s |______\\___/ \\__,_|\\__,_|_|_| |_|\\__, (_|_|_) \n", "");
+    printw("%5s                                   __/ |       \n", "");
+    printw("%5s                                  |___/        \n", "");
+
+    refresh();
 }

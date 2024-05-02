@@ -19,18 +19,33 @@ void Game::setInterface(Interface interface) {
 }
 
 void Game::start() {
-    
+    initNcurses();   // Initialize ncurses
+    runMenu();       // Run the menu
+    endNcurses();    // End ncurses
+    system("clear"); // Clear the terminal
+}
+
+void Game::initNcurses() {
+
     setlocale(LC_ALL, "");
 
-    initscr(); // Initialize ncurse
-    raw(); // Disable line buffering
+    initscr();            // Initialize ncurse
+    raw();                // Disable line buffering
     keypad(stdscr, TRUE); // Enable keypad for arrow keys
 
-    use_default_colors(); // Use default colors
-    start_color(); // Start color mode
-    init_pair(1, COLOR_RED, -1); // Define color pair 1 (red)
-    init_pair(2, COLOR_BLUE, -1); // Define color pair 2 (blue)
+    use_default_colors();          // Use default colors
+    start_color();                 // Start color mode
+    init_pair(1, COLOR_RED, -1);   // Define color pair 1 (red)
+    init_pair(2, COLOR_BLUE, -1);  // Define color pair 2 (blue)
     init_pair(3, COLOR_GREEN, -1); // Define color pair 2 (green)
+}
+
+void Game::endNcurses() {
+    refresh(); // Refresh the screen
+    endwin();  // End ncurses
+}
+
+void Game::runMenu() {
 
     while (true) {
 
@@ -44,53 +59,70 @@ void Game::start() {
         }
 
         if (option == 2) {
-            attron(COLOR_PAIR(3)); // Set color pair 3 (green)
-            int mode = interface.botMode();
-            attroff(COLOR_PAIR(3)); // Reset color pair
-            if (mode == 3)
-                continue; // If the user goes back to the main menu
-            playerVsBot(mode);
-            interface.displayGetBackToMenu();
+            runBotMenu();
         }
 
         if (option == 3) {
-            attron(COLOR_PAIR(3)); // Set color pair 3 (green)
+            attron(COLOR_PAIR(3));    // Set color pair 3 (green)
             interface.displayCredits();
             interface.displayGetBackToMenu();
             attroff(COLOR_PAIR(3)); // Reset color pair
         }
 
         if (option == 4) {
-            interface.displayGoodbye();
+            fileManager.clearExecutionTimes("../executionTimes.csv");
             break;
         }
     }
-    
-    refresh(); // Refresh the screen
-    endwin(); // End ncurses
-
-    system("clear"); // Clear the terminal
-
 }
-bool Game::checkWinOrDraw(Board board) {
 
-    if (board.checkWin(PLAYER_X)) {
-        clear();
-        interface.displayBoard(board.getBoard());
-        interface.displayWinMessage(PLAYER_X);
-        return true;
-    } else if (board.checkWin(PLAYER_O)) {
-        clear();
-        interface.displayBoard(board.getBoard());
-        interface.displayWinMessage(PLAYER_O);
-        return true;
-    } else if (board.isFull()) {
-        clear();
-        interface.displayBoard(board.getBoard());
-        interface.displayDrawMessage();
-        return true;
+void Game::runBotMenu() {
+
+    while (true) {
+
+        attron(COLOR_PAIR(3)); // Set color pair 3 (green)
+        int botMenuChoice = interface.botMenu();
+        attroff(COLOR_PAIR(3)); // Reset color pair
+
+        if (botMenuChoice == 1) {
+            playerVsBot(0, false); // Non-threaded
+        }
+
+        if (botMenuChoice == 2) {
+            playerVsBot(1, false); // Threaded
+        }
+
+        if (botMenuChoice == 3) {
+            runSimulateGamesMenu();
+        }
+
+        if (botMenuChoice == 4) {
+            break;
+        }
     }
-    return false;
+}
+
+void Game::runSimulateGamesMenu() {
+
+    attron(COLOR_PAIR(3));    // Set color pair 3 (green)
+    int numberOfGames = interface.simulateGamesMenu(); // Get number of games to simulate
+    attroff(COLOR_PAIR(3)); // Reset color pair
+
+    if(numberOfGames == 0) {
+        return;
+    }
+
+    attron(COLOR_PAIR(3));    // Set color pair 3 (green)
+    interface.displayLoading();
+    attroff(COLOR_PAIR(3)); // Reset color pair
+
+    simulateGames(numberOfGames, 0);
+    simulateGames(numberOfGames, 1);
+
+    attron(COLOR_PAIR(3));    // Set color pair 3 (green)
+    interface.displayStats(); // Display stats
+    interface.displayGetBackToMenu();
+    attroff(COLOR_PAIR(3)); // Reset color pair
 }
 
 void Game::playerVsPlayer() {
@@ -118,22 +150,26 @@ void Game::playerVsPlayer() {
         if (checkWinOrDraw(board))
             break;
     }
-
 }
 
-void Game::playerVsBot(int mode) {
+void Game::playerVsBot(int mode, bool simulated) {
     Board board;
     Bot bot;
-    if (mode == 2)
+    if (mode == 1)
         bot.setMode(1);
 
     char currentPlayer = PLAYER_X;
-    std::vector<int> executionTimes;
+    std::vector<std::pair<int, int>> executionTimes;
 
     while (true) {
 
         if (currentPlayer == PLAYER_X) {
-            int position = interface.playerTurn(currentPlayer, board);
+            int position;
+            if (simulated) {
+                position = bot.getBestMove(board).getRow() * 3 + bot.getBestMove(board).getCol() + 1;
+            } else {
+                position = interface.playerTurn(currentPlayer, board);
+            }
 
             int row = (position - 1) / 3;
             int col = (position - 1) % 3;
@@ -157,7 +193,7 @@ void Game::playerVsBot(int mode) {
 
             auto duration = std::chrono::duration_cast<std::chrono::microseconds>(stop - start);
 
-            executionTimes.push_back(duration.count());
+            executionTimes.push_back(std::make_pair(mode, duration.count()));
 
             board.placeMove(botMove.getRow(), botMove.getCol(), PLAYER_O);
             currentPlayer = PLAYER_X;
@@ -168,5 +204,42 @@ void Game::playerVsBot(int mode) {
     }
 
     interface.displayExecutionTimes(executionTimes);
+    saveExecutionTimes(executionTimes);
+}
 
+bool Game::checkWinOrDraw(Board board) {
+
+    if (board.checkWin(PLAYER_X)) {
+        clear();
+        interface.displayBoard(board.getBoard());
+        interface.displayWinMessage(PLAYER_X);
+        return true;
+    } else if (board.checkWin(PLAYER_O)) {
+        clear();
+        interface.displayBoard(board.getBoard());
+        interface.displayWinMessage(PLAYER_O);
+        return true;
+    } else if (board.isFull()) {
+        clear();
+        interface.displayBoard(board.getBoard());
+        interface.displayDrawMessage();
+        return true;
+    }
+    return false;
+}
+
+void Game::saveExecutionTimes(std::vector<std::pair<int, int>> executionTimes) {
+    FileManager fileManager;
+    std::vector<std::string> lines;
+    for (const auto &[mode, time] : executionTimes) {
+        std::string line = std::to_string(mode) + "," + std::to_string(time);
+        lines.push_back(line);
+    }
+    fileManager.writeExecutionTimes("../executionTimes.csv", lines);
+}
+
+void Game::simulateGames(int games, int mode) {
+    for (int i = 0; i < games; i++) {
+        playerVsBot(mode, true);
+    }
 }
