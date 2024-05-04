@@ -20,7 +20,7 @@ void Game::setInterface(Interface interface) {
 
 void Game::start() {
     initNcurses();   // Initialize ncurses
-    runMenu();       // Run the menu
+    runMainMenu();       // Run the menu
     endNcurses();    // End ncurses
     system("clear"); // Clear the terminal
 }
@@ -35,41 +35,32 @@ void Game::initNcurses() {
 
     use_default_colors();          // Use default colors
     start_color();                 // Start color mode
-    init_pair(1, COLOR_RED, -1);   // Define color pair 1 (red)
-    init_pair(2, COLOR_BLUE, -1);  // Define color pair 2 (blue)
-    init_pair(3, COLOR_GREEN, -1); // Define color pair 2 (green)
+    init_pair(1, COLOR_GREEN, -1);   //  Define color pair 0 (green) - Text color
+    init_pair(2, COLOR_RED, -1);  // Define color pair 2 (red)
+    init_pair(3, COLOR_BLUE, -1); // Define color pair 2 (blue)
 }
 
 void Game::endNcurses() {
-    refresh(); // Refresh the screen
+    refresh();
     endwin();  // End ncurses
 }
 
-void Game::runMenu() {
+void Game::runMainMenu() {
+
+    std::vector<std::string> options = {"Player vs Player", "Player vs Bot", "Credits", "Exit"};
+    std::string menuMessage = "Use the arrow keys to navigate the menu";
 
     while (true) {
 
-        attron(COLOR_PAIR(3)); // Set color pair 3 (green)
-        int option = interface.menu();
-        attroff(COLOR_PAIR(3)); // Reset color pair
+        int option = interface.menu(options, menuMessage);
 
-        if (option == 1) {
+        if (option == 0) {
             playerVsPlayer();
-            interface.displayGetBackToMenu();
-        }
-
-        if (option == 2) {
+        } else if (option == 1) {
             runBotMenu();
-        }
-
-        if (option == 3) {
-            attron(COLOR_PAIR(3));    // Set color pair 3 (green)
+        } else if (option == 2) {
             interface.displayCredits();
-            interface.displayGetBackToMenu();
-            attroff(COLOR_PAIR(3)); // Reset color pair
-        }
-
-        if (option == 4) {
+        } else if (option == 3) {
             fileManager.clearExecutionTimes("../executionTimes.csv");
             break;
         }
@@ -78,27 +69,22 @@ void Game::runMenu() {
 
 void Game::runBotMenu() {
 
+    std::vector<std::string> options = {"Non-threaded", "Threaded", "Simulate games", "Back"};
+    std::string menuMessage = "Use the arrow keys to navigate the menu";
+
     while (true) {
 
-        attron(COLOR_PAIR(3)); // Set color pair 3 (green)
-        int botMenuChoice = interface.botMenu();
-        attroff(COLOR_PAIR(3)); // Reset color pair
+        int option = interface.menu(options, menuMessage);
 
-        if (botMenuChoice == 1) {
-            playerVsBot(0, false); // Non-threaded
+        if (option == 0) {
+            playerVsBot(0); // Non-threaded
             interface.displayGetBackToMenu();
-        }
-
-        if (botMenuChoice == 2) {
-            playerVsBot(1, false); // Threaded
+        }else if (option == 1) {
+            playerVsBot(1); // Threaded
             interface.displayGetBackToMenu();
-        }
-
-        if (botMenuChoice == 3) {
+        } else if (option == 2) {
             runSimulateGamesMenu();
-        }
-
-        if (botMenuChoice == 4) {
+        } else if (option == 3) {
             break;
         }
     }
@@ -106,27 +92,32 @@ void Game::runBotMenu() {
 
 void Game::runSimulateGamesMenu() {
 
-    attron(COLOR_PAIR(3));    // Set color pair 3 (green)
-    int numberOfGames = interface.simulateGamesMenu(); // Get number of games to simulate
-    attroff(COLOR_PAIR(3)); // Reset color pair
+    std::map<int, int> optionsMap = {
+        {0, 5},
+        {1, 10},
+        {2, 15},
+        {3, 0}
+    };
+
+    std::vector<std::string> options = {"5 games", "10 games", "15 games", "Back"};
+    std::string menuMessage = "Use the arrow keys to navigate the menu";
+
+    int numberOfGames = optionsMap[interface.menu(options, menuMessage)];
 
     if(numberOfGames == 0) {
         return;
     }
 
-    attron(COLOR_PAIR(3));    // Set color pair 3 (green)
-    interface.displayLoading();
-    attroff(COLOR_PAIR(3)); // Reset color pair
+    interface.displaySimulating();
+
+    refresh();
 
     simulateGames(numberOfGames, 0);
     simulateGames(numberOfGames, 1);
 
     flushinp(); // Flush input buffer
 
-    attron(COLOR_PAIR(3));    // Set color pair 3 (green)
     interface.displayStats(); // Display stats
-    interface.displayGetBackToMenu();
-    attroff(COLOR_PAIR(3)); // Reset color pair
 }
 
 void Game::playerVsPlayer() {
@@ -136,12 +127,12 @@ void Game::playerVsPlayer() {
 
     while (true) {
 
-        int position = interface.playerTurn(currentPlayer, board);
+        Move position = interface.playingBoard(currentPlayer, board);
 
         refresh();
 
-        int row = (position - 1) / 3;
-        int col = (position - 1) % 3;
+        int row = position.getRow();
+        int col = position.getCol();
 
         if (board.isEmpty(row, col)) {
             board.placeMove(row, col, currentPlayer);
@@ -151,16 +142,36 @@ void Game::playerVsPlayer() {
             continue;
         }
 
-        if (checkWinOrDraw(board))
+        if (board.checkWin(PLAYER_X)) {
+            clear();
+            interface.playingBoard(PLAYER_X, board, false, true);
+            interface.displayWinMessage(PLAYER_X);
             break;
+        } else if (board.checkWin(PLAYER_O)) {
+            clear();
+            interface.playingBoard(PLAYER_X, board, false, true);
+            interface.displayWinMessage(PLAYER_O);
+            break;
+        } else if (board.isFull()) {
+            clear();
+            interface.playingBoard(PLAYER_X, board, false, true);
+            interface.displayDrawMessage();
+            break;
+        }
     }
+
+    interface.displayGetBackToMenu();
+
 }
 
-void Game::playerVsBot(int mode, bool simulated) {
+void Game::playerVsBot(int mode) {
+
     Board board;
     Bot bot;
-    if (mode == 1)
-        bot.setMode(1);
+
+    if (mode == 1){
+        bot.setThreaded(true);
+    }
 
     char currentPlayer = PLAYER_X;
     std::vector<std::pair<int, int>> executionTimes;
@@ -168,15 +179,11 @@ void Game::playerVsBot(int mode, bool simulated) {
     while (true) {
 
         if (currentPlayer == PLAYER_X) {
-            int position;
-            if (simulated) {
-                position = bot.getBestMove(board).getRow() * 3 + bot.getBestMove(board).getCol() + 1;
-            } else {
-                position = interface.playerTurn(currentPlayer, board);
-            }
 
-            int row = (position - 1) / 3;
-            int col = (position - 1) % 3;
+            Move position = interface.playingBoard(currentPlayer, board);
+
+            int row = position.getRow();
+            int col = position.getCol();
 
             if (board.isEmpty(row, col)) {
                 board.placeMove(row, col, PLAYER_X);
@@ -188,11 +195,14 @@ void Game::playerVsBot(int mode, bool simulated) {
         } else {
 
             clear();
+            
+            interface.playingBoard(PLAYER_O, board, true);
 
-            interface.displayBoard(board.getBoard());
+            // Sleep between 1 and 2 seconds
+            std::this_thread::sleep_for(std::chrono::milliseconds(1000 + (rand() % 1000)));
 
             auto start = std::chrono::high_resolution_clock::now();
-            Move botMove = bot.getBestMove(board);
+            Move botMove = bot.getBestMove(board, PLAYER_O);
             auto stop = std::chrono::high_resolution_clock::now();
 
             auto duration = std::chrono::duration_cast<std::chrono::microseconds>(stop - start);
@@ -201,35 +211,86 @@ void Game::playerVsBot(int mode, bool simulated) {
 
             board.placeMove(botMove.getRow(), botMove.getCol(), PLAYER_O);
             currentPlayer = PLAYER_X;
+
+            flushinp(); // Flush input buffer
         }
 
-        if (checkWinOrDraw(board))
+        
+        if (board.checkWin(PLAYER_X)) {
+            clear();
+            interface.playingBoard(PLAYER_X, board, false, true);
+            interface.displayWinMessage(PLAYER_X);
             break;
+        } else if (board.checkWin(PLAYER_O)) {
+            clear();
+            interface.playingBoard(PLAYER_X, board, false, true);
+            interface.displayWinMessage(PLAYER_O);
+            break;
+        } else if (board.isFull()) {
+            clear();
+            interface.playingBoard(PLAYER_X, board, false, true);
+            interface.displayDrawMessage();
+            break;
+        }
     }
 
     interface.displayExecutionTimes(executionTimes);
     saveExecutionTimes(executionTimes);
 }
 
-bool Game::checkWinOrDraw(Board board) {
+void Game::botVsBot(int mode){
+    
+        Board board;
+        Bot bot;
+    
+        if (mode == 1){
+            bot.setThreaded(true);
+        }
+    
+        char currentPlayer = PLAYER_X;
 
-    if (board.checkWin(PLAYER_X)) {
-        clear();
-        interface.displayBoard(board.getBoard());
-        interface.displayWinMessage(PLAYER_X);
-        return true;
-    } else if (board.checkWin(PLAYER_O)) {
-        clear();
-        interface.displayBoard(board.getBoard());
-        interface.displayWinMessage(PLAYER_O);
-        return true;
-    } else if (board.isFull()) {
-        clear();
-        interface.displayBoard(board.getBoard());
-        interface.displayDrawMessage();
-        return true;
-    }
-    return false;
+        std::vector<std::pair<int, int>> executionTimes;
+    
+        while (true) {
+    
+            if (currentPlayer == PLAYER_X) {
+    
+                clear();
+    
+                auto start = std::chrono::high_resolution_clock::now();
+                Move botMove = bot.getBestMove(board, PLAYER_X);
+                auto stop = std::chrono::high_resolution_clock::now();
+    
+                board.placeMove(botMove.getRow(), botMove.getCol(), PLAYER_X);
+                currentPlayer = PLAYER_O;
+            } else {
+    
+                clear();
+
+                auto start = std::chrono::high_resolution_clock::now();
+                Move botMove = bot.getBestMove(board, PLAYER_O);
+                auto stop = std::chrono::high_resolution_clock::now();
+                
+                auto duration = std::chrono::duration_cast<std::chrono::microseconds>(stop - start);
+
+                executionTimes.push_back(std::make_pair(mode, duration.count()));
+    
+                board.placeMove(botMove.getRow(), botMove.getCol(), PLAYER_O);
+                currentPlayer = PLAYER_X;
+            }
+    
+            if (board.checkWin(PLAYER_X)) {
+                break;
+            } else if (board.checkWin(PLAYER_O)) {
+                break;
+            } else if (board.isFull()) {
+                break;
+            }
+
+        }
+    
+    saveExecutionTimes(executionTimes);
+    
 }
 
 void Game::saveExecutionTimes(std::vector<std::pair<int, int>> executionTimes) {
@@ -244,6 +305,6 @@ void Game::saveExecutionTimes(std::vector<std::pair<int, int>> executionTimes) {
 
 void Game::simulateGames(int games, int mode) {
     for (int i = 0; i < games; i++) {
-        playerVsBot(mode, true);
+        botVsBot(mode);
     }
 }

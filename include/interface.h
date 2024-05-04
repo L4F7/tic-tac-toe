@@ -9,6 +9,7 @@
 
 #include "board.h"
 #include "fileManager.h"
+#include "move.h"
 
 class Interface {
 
@@ -16,22 +17,18 @@ public:
     Interface();
     ~Interface();
     void displayMenuAsciiArt();
-    int menu();
+    void displayLoading();
+    void displaySimulating();
+    int menu(std::vector<std::string> options, std::string menuMessage);
     void displayGetBackToMenu();
-    int botMenu();
-    int simulateGamesMenu();
     void displayCredits();
-    void displayBoard(Board board);
-    int playingBoard(char player, Board board);
-    int playerTurn(char player, Board board);
+    Move playingBoard(char player, Board board, bool botTurn = false, bool gameOver = false);
     void displayInvalidMove();
-    void displayGoodbye();
     void displayWinMessage(char player);
     void displayDrawMessage();
     void displayExecutionTimes(std::vector<std::pair<int, int>> executionTimes);
     void displayStats();
     void displayExecutionTimesBarChart(std::vector<std::pair<int, int>> executionTimes);
-    void displayLoading();
 };
 
 #endif // INTERFACE_H

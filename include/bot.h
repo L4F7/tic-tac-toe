@@ -13,16 +13,16 @@ public:
     Bot();
     ~Bot();
 
-    void setMode(int mode);
-    int getMode();
+    void setThreaded(bool threaded);
+    int getThreaded();
 
-    Move getBestMove(Board &board);
-    Move getBestMoveNonThreaded(Board &board);
-    Move getBestMoveThreaded(Board &board);
+    Move getBestMove(Board &board, char playerToSimulate);
+    Move getBestMoveNonThreaded(Board &board, char playerToSimulate);
+    Move getBestMoveThreaded(Board &board, char playerToSimulate);
 
 private:
-    int mode;
-    int minMax(Board &board, bool isMaximizing);
+    bool threaded;
+    int minMax(Board &board, bool isMaximizing, char playerToSimulate);
 };
 
 #endif // BOT_H

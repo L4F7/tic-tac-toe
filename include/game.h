@@ -10,6 +10,7 @@
 #include "bot.h"
 #include "fileManager.h"
 #include "interface.h"
+#include "move.h"
 
 class Game {
 
@@ -28,12 +29,12 @@ private:
 
     void initNcurses();
     void endNcurses();
-    void runMenu();
+    void runMainMenu();
     void runBotMenu();
     void runSimulateGamesMenu();
     void playerVsPlayer();
-    void playerVsBot(int mode, bool simulated);
-    bool checkWinOrDraw(Board board);
+    void playerVsBot(int mode);
+    void botVsBot(int mode);
     void saveExecutionTimes(std::vector<std::pair<int, int>> executionTimes);
     void simulateGames(int games, int mode);
 };
