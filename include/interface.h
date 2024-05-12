@@ -19,16 +19,17 @@ public:
     void displayMenuAsciiArt();
     void displayLoading();
     void displaySimulating();
-    int menu(std::vector<std::string> options, std::string menuMessage);
     void displayGetBackToMenu();
     void displayCredits();
-    Move playingBoard(char player, Board board, bool botTurn = false, bool gameOver = false);
     void displayInvalidMove();
     void displayWinMessage(char player);
     void displayDrawMessage();
     void displayExecutionTimes(std::vector<std::pair<int, int>> executionTimes);
     void displayStats();
     void displayExecutionTimesBarChart(std::vector<std::pair<int, int>> executionTimes);
+    
+    int menu(std::vector<std::string> options, std::string menuMessage);
+    Move playingBoard(char player, Board board, bool botTurn = false, bool gameOver = false);
 };
 
 #endif // INTERFACE_H

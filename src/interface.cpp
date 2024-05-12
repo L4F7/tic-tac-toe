@@ -16,7 +16,7 @@ void Interface::displayMenuAsciiArt() {
     attroff(COLOR_PAIR(1));
 
     // Reference: https://patorjk.com/software/taag/#p=display&f=ANSI%20Regular&t=TIC-TAC-TOE
-    
+
 }
 
 void Interface::displayLoading() {
@@ -59,60 +59,6 @@ void Interface::displaySimulating(){
 
 }
 
-int Interface::menu(std::vector<std::string> options, std::string menuMessage){
-    int choice = 0; // Default selected option
-
-    while(true){
-
-        clear(); 
-        int numOptions = options.size();
-
-        displayMenuAsciiArt();
-
-        attron(COLOR_PAIR(1)); 
-
-        printw("    %s\n\n", menuMessage.c_str());
-
-        //Print options
-        for(int i = 0; i < numOptions; i++){
-            printw("      ");
-            if( i == choice ){
-                printw("=> ");
-                attron(A_STANDOUT);
-                printw("%s\n", options.at(i).c_str());
-                attroff(A_STANDOUT);
-            } else {
-                printw("%s\n", options.at(i).c_str());
-            }
-        }
-
-        attroff(COLOR_PAIR(1));
-
-        int input = getch(); // Wait for a key press
-
-        if (input == 'q' || input == 'Q') {
-            return numOptions; // Exit the program
-        } else if (input == KEY_UP || input == 'w' || input == 'W') {
-            if (choice == 0) {
-                choice = numOptions - 1;
-            } else {
-                choice--;
-            }
-        } else if (input == KEY_DOWN || input == 's' || input == 'S') {
-            if (choice == numOptions - 1) {
-                choice = 0;
-            } else {
-                choice++;
-            }
-        } else if (input == '\n') {
-            return choice; // Return the selected option
-        }
-
-        refresh();
-
-    }
-}
-
 void Interface::displayGetBackToMenu() {
 
     attron(COLOR_PAIR(1)); 
@@ -141,163 +87,10 @@ void Interface::displayCredits() {
     displayGetBackToMenu();
 }
 
-Move Interface::playingBoard(char player, Board board, bool botTurn, bool gameOver) {
-
-    std::vector<int> currentPosition = board.getFirstAvailableMove();
-    std::vector<int> newPosition = currentPosition;
-    std::vector<int> invalidPosition = {-1, -1};
-
-    while (true) {
-        clear(); 
-
-        attron(COLOR_PAIR(1));
-        displayMenuAsciiArt();
-        attroff(COLOR_PAIR(1));
-
-        if (!botTurn && !gameOver) {
-            attron(COLOR_PAIR(1));
-            printw("    Use the arrow keys to navigate the board\n\n");
-            attroff(COLOR_PAIR(1));
-        } 
-
-        if (botTurn && !gameOver) {
-            attron(COLOR_PAIR(1));
-            printw("    Bot is thinking...\n\n");
-            attroff(COLOR_PAIR(1));
-        }
-
-        if (gameOver) {
-            attron(COLOR_PAIR(1));
-            printw("    Game over!\n\n");
-            attroff(COLOR_PAIR(1));
-        }
-
-        //-----------------------------------------------------------------------------------------------------
-
-        // Constants
-        const char EMPTY = ' ';
-        const char PLAYER_X = 'X';
-        const char PLAYER_O = 'O';
-
-        // Board
-        const std::string boardTop = "               ╔═════╦═════╦═════╗\n";
-        const std::string boardBottom = "               ╚═════╩═════╩═════╝\n";
-        const std::string boardMiddle = "               ╠═════╬═════╬═════╣\n";
-        const std::string emptyCell = "   ";
-
-        std::map<char, std::vector<std::string>> board_map = {
-            {'X', {"█ █", " █ ", "█ █"}},
-            {'O', {" █ ", "█ █", " █ "}},
-            {' ', {"   ", "   ", "   "}}};
-
-        attron(COLOR_PAIR(1));
-        printw("\n\n                 Player %c's turn\n\n", player);
-        attroff(COLOR_PAIR(1));
-
-        for (int i = 0; i < 13; i++) {
-
-            if (i == 0) {
-                attron(COLOR_PAIR(1));
-                printw("%s", boardTop.c_str());
-                attroff(COLOR_PAIR(1));
-            } else if (i == 12) {
-                attron(COLOR_PAIR(1));
-                printw("%s", boardBottom.c_str());
-                attroff(COLOR_PAIR(1));
-            } else if (i % 4 == 0) {
-                attron(COLOR_PAIR(1));
-                printw("%s", boardMiddle.c_str());
-                attroff(COLOR_PAIR(1));
-            } else {
-
-                for (int j = 0; j < 7; j++) {
-
-                    if (j == 0) {
-                        attron(COLOR_PAIR(1));
-                        printw("               ║ ");
-                        attroff(COLOR_PAIR(1));
-                    } else if (j == 6) {
-                        attron(COLOR_PAIR(1));
-                        printw(" ║\n");
-                        attroff(COLOR_PAIR(1));
-                    } else if (j % 2 == 0) {
-                        attron(COLOR_PAIR(1));
-                        printw(" ║ ");
-                        attroff(COLOR_PAIR(1));
-                    } else {
-                        int row_index = (i - 1) / 4;
-                        int col_index = (j - 1) / 2;
-
-                        std::vector<std::vector<char>> currentBoard = board.getBoard();
-
-                        if (row_index == currentPosition[0] && col_index == currentPosition[1] && !gameOver && !botTurn) {
-                            int color = player == PLAYER_X ? 2 : 3;
-                            attron(COLOR_PAIR(color) | A_BLINK | A_BOLD);
-                            printw("%s", board_map[player][(i - 1) % 4].c_str());
-                            attroff(COLOR_PAIR(color) | A_BLINK | A_BOLD);
-                        } else if (currentBoard[row_index][col_index] != EMPTY) {
-                            int color = currentBoard[row_index][col_index] == PLAYER_X ? 2 : 3;
-                            attron(COLOR_PAIR(color));
-                            printw("%s", board_map[currentBoard[row_index][col_index]][(i - 1) % 4].c_str());
-                            attroff(COLOR_PAIR(color));
-                        } else {
-                            printw("%s", emptyCell.c_str());
-                        }
-                    }
-                }
-            }
-        }
-
-        //-----------------------------------------------------------------------------------------------------
-        refresh();
-
-        if (gameOver || botTurn) {
-            break;
-        }
-
-        int ch = getch(); // Wait for a key press
-
-        if (ch == '\n') {
-            break;
-        } else if (ch == KEY_UP || ch == 'w' || ch == 'W') {
-            newPosition = board.getMoveUp(currentPosition);
-            if (newPosition == invalidPosition) {
-                displayInvalidMove();
-            } else {
-                currentPosition = newPosition;
-            }
-
-        } else if (ch == KEY_DOWN || ch == 's' || ch == 'S') {
-            newPosition = board.getMoveDown(currentPosition);
-            if (newPosition == invalidPosition) {
-                displayInvalidMove();
-            } else {
-                currentPosition = newPosition;
-            }
-
-        } else if (ch == KEY_LEFT || ch == 'a' || ch == 'A') {
-            newPosition = board.getMoveLeft(currentPosition);
-            if (newPosition == invalidPosition) {
-                displayInvalidMove();
-            } else {
-                currentPosition = newPosition;
-            }
-
-        } else if (ch == KEY_RIGHT || ch == 'd' || ch == 'D') {
-            newPosition = board.getMoveRight(currentPosition);
-            if (newPosition == invalidPosition) {
-                displayInvalidMove();
-            } else {
-                currentPosition = newPosition;
-            }
-        }
-    }
-
-    return Move(currentPosition[0], currentPosition[1]);
-}
-
 void Interface::displayInvalidMove() {
+    attron(COLOR_PAIR(1));
     printw("\n             Invalid move! Try again");
+    attroff(COLOR_PAIR(1));
     refresh();
     getch(); // Wait for any key press
 }
@@ -453,4 +246,213 @@ void Interface::displayExecutionTimesBarChart(std::vector<std::pair<int, int>> a
     printw("%15d └─────┴──────┴────────┴──────┴────\n", 0);
     printw("%15s     Non-threaded      Threaded    \n", "");
 
+}
+
+int Interface::menu(std::vector<std::string> options, std::string menuMessage){
+    int choice = 0; // Default selected option
+
+    while(true){
+
+        clear(); 
+        int numOptions = options.size();
+
+        displayMenuAsciiArt();
+
+        attron(COLOR_PAIR(1)); 
+
+        printw("    %s\n\n", menuMessage.c_str());
+
+        //Print options
+        for(int i = 0; i < numOptions; i++){
+            printw("      ");
+            if( i == choice ){
+                printw("=> ");
+                attron(A_STANDOUT);
+                printw("%s\n", options.at(i).c_str());
+                attroff(A_STANDOUT);
+            } else {
+                printw("%s\n", options.at(i).c_str());
+            }
+        }
+
+        attroff(COLOR_PAIR(1));
+
+        int input = getch(); // Wait for a key press
+
+        if (input == 'q' || input == 'Q') {
+            return numOptions; // Exit the program
+        } else if (input == KEY_UP || input == 'w' || input == 'W') {
+            if (choice == 0) {
+                choice = numOptions - 1;
+            } else {
+                choice--;
+            }
+        } else if (input == KEY_DOWN || input == 's' || input == 'S') {
+            if (choice == numOptions - 1) {
+                choice = 0;
+            } else {
+                choice++;
+            }
+        } else if (input == '\n') {
+            return choice; // Return the selected option
+        }
+
+        refresh();
+
+    }
+}
+
+Move Interface::playingBoard(char player, Board board, bool botTurn, bool gameOver) {
+
+    std::vector<int> currentPosition = board.getFirstAvailableMove();
+    std::vector<int> newPosition = currentPosition;
+    std::vector<int> invalidPosition = {-1, -1};
+
+    while (true) {
+        clear(); 
+
+        attron(COLOR_PAIR(1));
+        displayMenuAsciiArt();
+        attroff(COLOR_PAIR(1));
+
+        if (!botTurn && !gameOver) {
+            attron(COLOR_PAIR(1));
+            printw("    Use the arrow keys to navigate the board\n\n");
+            attroff(COLOR_PAIR(1));
+        } 
+
+        if (botTurn && !gameOver) {
+            attron(COLOR_PAIR(1));
+            printw("    Bot is thinking...\n\n");
+            attroff(COLOR_PAIR(1));
+        }
+
+        if (gameOver) {
+            attron(COLOR_PAIR(1));
+            printw("    Game over!\n\n");
+            attroff(COLOR_PAIR(1));
+        }
+
+        //-----------------------------------------------------------------------------------------------------
+
+        // Constants
+        const char EMPTY = ' ';
+        const char PLAYER_X = 'X';
+        const char PLAYER_O = 'O';
+
+        // Board
+        const std::string boardTop = "               ╔═════╦═════╦═════╗\n";
+        const std::string boardBottom = "               ╚═════╩═════╩═════╝\n";
+        const std::string boardMiddle = "               ╠═════╬═════╬═════╣\n";
+        const std::string emptyCell = "   ";
+
+        std::map<char, std::vector<std::string>> board_map = {
+            {'X', {"█ █", " █ ", "█ █"}},
+            {'O', {" █ ", "█ █", " █ "}},
+            {' ', {"   ", "   ", "   "}}};
+
+        attron(COLOR_PAIR(1));
+        printw("\n\n                 Player %c's turn\n\n", player);
+        attroff(COLOR_PAIR(1));
+
+        for (int i = 0; i < 13; i++) {
+
+            if (i == 0) {
+                attron(COLOR_PAIR(1));
+                printw("%s", boardTop.c_str());
+                attroff(COLOR_PAIR(1));
+            } else if (i == 12) {
+                attron(COLOR_PAIR(1));
+                printw("%s", boardBottom.c_str());
+                attroff(COLOR_PAIR(1));
+            } else if (i % 4 == 0) {
+                attron(COLOR_PAIR(1));
+                printw("%s", boardMiddle.c_str());
+                attroff(COLOR_PAIR(1));
+            } else {
+
+                for (int j = 0; j < 7; j++) {
+
+                    if (j == 0) {
+                        attron(COLOR_PAIR(1));
+                        printw("               ║ ");
+                        attroff(COLOR_PAIR(1));
+                    } else if (j == 6) {
+                        attron(COLOR_PAIR(1));
+                        printw(" ║\n");
+                        attroff(COLOR_PAIR(1));
+                    } else if (j % 2 == 0) {
+                        attron(COLOR_PAIR(1));
+                        printw(" ║ ");
+                        attroff(COLOR_PAIR(1));
+                    } else {
+                        int row_index = (i - 1) / 4;
+                        int col_index = (j - 1) / 2;
+
+                        std::vector<std::vector<char>> currentBoard = board.getBoard();
+
+                        if (row_index == currentPosition[0] && col_index == currentPosition[1] && !gameOver && !botTurn) {
+                            int color = player == PLAYER_X ? 2 : 3;
+                            attron(COLOR_PAIR(color) | A_BLINK | A_BOLD);
+                            printw("%s", board_map[player][(i - 1) % 4].c_str());
+                            attroff(COLOR_PAIR(color) | A_BLINK | A_BOLD);
+                        } else if (currentBoard[row_index][col_index] != EMPTY) {
+                            int color = currentBoard[row_index][col_index] == PLAYER_X ? 2 : 3;
+                            attron(COLOR_PAIR(color));
+                            printw("%s", board_map[currentBoard[row_index][col_index]][(i - 1) % 4].c_str());
+                            attroff(COLOR_PAIR(color));
+                        } else {
+                            printw("%s", emptyCell.c_str());
+                        }
+                    }
+                }
+            }
+        }
+
+        //-----------------------------------------------------------------------------------------------------
+        refresh();
+
+        if (gameOver || botTurn) {
+            break;
+        }
+
+        int ch = getch(); // Wait for a key press
+
+        if (ch == '\n') {
+            break;
+        } else if (ch == KEY_UP || ch == 'w' || ch == 'W') {
+            newPosition = board.getMoveUp(currentPosition);
+            if (newPosition == invalidPosition) {
+                displayInvalidMove();
+            } else {
+                currentPosition = newPosition;
+            }
+
+        } else if (ch == KEY_DOWN || ch == 's' || ch == 'S') {
+            newPosition = board.getMoveDown(currentPosition);
+            if (newPosition == invalidPosition) {
+                displayInvalidMove();
+            } else {
+                currentPosition = newPosition;
+            }
+
+        } else if (ch == KEY_LEFT || ch == 'a' || ch == 'A') {
+            newPosition = board.getMoveLeft(currentPosition);
+            if (newPosition == invalidPosition) {
+                displayInvalidMove();
+            } else {
+                currentPosition = newPosition;
+            }
+
+        } else if (ch == KEY_RIGHT || ch == 'd' || ch == 'D') {
+            newPosition = board.getMoveRight(currentPosition);
+            if (newPosition == invalidPosition) {
+                displayInvalidMove();
+            } else {
+                currentPosition = newPosition;
+            }
+        }
+    }
+
+    return Move(currentPosition[0], currentPosition[1]);
 }

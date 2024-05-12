@@ -35,6 +35,9 @@ void Game::initNcurses() {
 
     use_default_colors();          // Use default colors
     start_color();                 // Start color mode
+
+    // -1 is the terminal default text or background color
+
     init_pair(1, COLOR_GREEN, -1);   //  Define color pair 0 (green) - Text color
     init_pair(2, COLOR_RED, -1);  // Define color pair 2 (red)
     init_pair(3, COLOR_BLUE, -1); // Define color pair 2 (blue)
@@ -198,8 +201,8 @@ void Game::playerVsBot(int mode) {
             
             interface.playingBoard(PLAYER_O, board, true);
 
-            // Sleep between 1 and 2 seconds
-            std::this_thread::sleep_for(std::chrono::milliseconds(1000 + (rand() % 1000)));
+            // Sleep between 250 and 1000 milliseconds
+            std::this_thread::sleep_for(std::chrono::milliseconds(250 + (rand() % 750)));
 
             auto start = std::chrono::high_resolution_clock::now();
             Move botMove = bot.getBestMove(board, PLAYER_O);

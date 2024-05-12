@@ -51,7 +51,11 @@ int FileManager::writeExecutionTimes(std::string fileName, std::vector<std::stri
 }
 
 void FileManager::clearExecutionTimes(std::string fileName) {
-    // Clear the file by opening it in out mode
-    std::ofstream file(fileName, std::ios::out);
-    file.close();
+    try{
+        // Clear the file by opening it in out mode
+        std::ofstream file(fileName, std::ios::out);
+        file.close();
+    } catch (const std::exception& e) {
+        return;
+    }
 }
