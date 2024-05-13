@@ -16,6 +16,7 @@ int Move::getRow() const {
     return row;
 }
 
+
 int Move::getCol() const {
     return col;
 }

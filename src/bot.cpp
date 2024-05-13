@@ -1,6 +1,6 @@
 #include "bot.h"
 
-// Constants
+// Constants for the game symbols
 const char EMPTY = ' ';
 const char PLAYER_X = 'X';
 const char PLAYER_O = 'O';
@@ -20,88 +20,84 @@ int Bot::getThreaded() {
     return threaded;
 }
 
-// Function to get the best move for the given player.
+/**
+ * @brief Finds the best move for a given player using the Minimax algorithm, with or without threads.
+ */
 Move Bot::getBestMove(Board &board, char playerToSimulate) {
-
-    // If the bot is set to use threading, use the threaded version.
+    // Check if multithreading is enabled
     if (threaded) {
+        // If threaded, use the threaded version of the function to find the best move
         return getBestMoveThreaded(board, playerToSimulate);
-    } else { // Otherwise, use the non-threaded version.
+    } else {
+        // If not threaded, use the non-threaded version of the function to find the best move
         return getBestMoveNonThreaded(board, playerToSimulate);
     }
 }
 
-// Function to find the best move for the given player without using threading.
+/**
+ * @brief Finds the best move for a given player without using threads.
+ */
 Move Bot::getBestMoveNonThreaded(Board &board, char playerToSimulate) {
-    // Initialize the best score to a very low value.
-    int bestScore = -1000;
-    // Initialize the best move.
-    Move bestMove;
-    // Get all available moves on the current board.
-    std::vector<Move> availableMoves = board.getAvailableMoves(); 
+    int bestScore = -1000; // Initialize the best score to a very low value
+    Move bestMove; // Initialize the best move
+    std::vector<Move> availableMoves = board.getAvailableMoves(); // Get all available moves on the board
 
     try {
-        // Iterate through each available move.
+        // Iterate through each available move
         for (const auto &move : availableMoves) {
-            // Place the move on the board.
+            // Place the move on the board
             board.placeMove(move.getRow(), move.getCol(), playerToSimulate);
-            // Calculate the score for the current move using the Minimax algorithm.
+            // Calculate the score using the Minimax algorithm
             int score = minMax(board, false, playerToSimulate); 
-            // Undo the move to revert the board back to its original state.
+            // Undo the move
             board.placeMove(move.getRow(), move.getCol(), EMPTY); 
-            // Update the best score and best move if the current move's score is better.
+
+            // If the current move yields a higher score than the previous best, update the best score and move
             if (score > bestScore) { 
                 bestScore = score;
                 bestMove = move;
             }
         }
     } catch (const std::exception &e) {
-        // If an exception occurs during the calculation, return an invalid move.
+        // In case of an exception, return an invalid move
         return {-1, -1};
     }
 
-    // Return the best move found.
+    // Return the best move found
     return bestMove;
 }
 
-// Function to find the best move for the given player using threading if there are 
-// enough available moves, otherwise fallbacks to non-threaded version.
+/**
+ * @brief Finds the best move for a given player using threads.
+ */
 Move Bot::getBestMoveThreaded(Board &board, char playerToSimulate) {
-    // Get all available moves on the current board.
-    std::vector<Move> availableMoves = board.getAvailableMoves();
+    std::vector<Move> availableMoves = board.getAvailableMoves(); // Get all available moves on the board
 
-    // If there are fewer than 5 available moves, use the non-threaded version for efficiency.
+    // If the number of available moves is less than 5, fall back to non-threaded approach
     if (availableMoves.size() < 5)
         return getBestMoveNonThreaded(board, playerToSimulate);
 
-    // Initialize the best score to a very low value.
-    int bestScore = -1000;
-    // Initialize the best move.
-    Move bestMove;
-    // Vector to hold threads for parallel execution.
-    std::vector<std::thread> threads;
-    // Vector to hold scores for each move.
-    std::vector<int> scores(availableMoves.size());
+    int bestScore = -1000; // Initialize the best score to a very low value
+    Move bestMove; // Initialize the best move
+    std::vector<std::thread> threads; // Container for threads
+    std::vector<int> scores(availableMoves.size()); // Container for scores corresponding to each move
 
     try {
-        // Start a thread for each available move to calculate scores concurrently.
+        // Create threads to evaluate each move concurrently
         for (int i = 0; i < availableMoves.size(); i++) {
             threads.push_back(std::thread([this, &board, &scores, i, &availableMoves, playerToSimulate] {
-                // Create a temporary board copy to simulate moves independently.
                 Board tempBoard(board);
-                // Simulate the move on the temporary board.
                 tempBoard.placeMove(availableMoves[i].getRow(), availableMoves[i].getCol(), playerToSimulate);
-                // Calculate the score for the move using the Minimax algorithm.
-                scores[i] = minMax(tempBoard, false, playerToSimulate);
+                scores[i] = minMax(tempBoard, false, playerToSimulate); // Calculate the score for the move
             }));
         }
 
-        // Wait for all threads to finish execution.
+        // Wait for all threads to finish
         for (auto &thread : threads) {
             thread.join();
         }
 
-        // Find the move with the highest score among all calculated scores.
+        // Find the move with the highest score
         for (int i = 0; i < availableMoves.size(); i++) {
             if (scores[i] > bestScore) {
                 bestScore = scores[i];
@@ -109,110 +105,56 @@ Move Bot::getBestMoveThreaded(Board &board, char playerToSimulate) {
             }
         }
     } catch (const std::exception &e) {
-        // If an exception occurs during the calculation, return an invalid move.
+        // In case of an exception, return an invalid move
         return {-1, -1};
     }
 
-    // Return the best move found.
+    // Return the best move found
     return bestMove;
 }
 
-// Minimax algorithm implementation to determine the score of a board state for a given player.
+/**
+ * @brief Implements the Minimax algorithm to determine the score of a given game state.
+ */
 int Bot::minMax(Board &board, bool isMaximizing, char playerToSimulate) {
-    // Determine the opponent's symbol based on the current player.
+    // Get the opponent's symbol
     char opponent = (playerToSimulate == PLAYER_X) ? PLAYER_O : PLAYER_X;
 
-    // Check if the current player has won.
+    // If the current player wins, return a high score; if the opponent wins, return a low score
     if (board.checkWin(playerToSimulate))
         return (playerToSimulate == PLAYER_O) ? 10 : -10;
     
-    // Check if the opponent has won.
     if (board.checkWin(opponent))
         return (playerToSimulate == PLAYER_O) ? -10 : 10;
     
-    // Check if the board is full, indicating a draw.
+    // If the board is full and no one wins, return a neutral score
     if (board.isFull())
         return 0;
 
-    // If it's the maximizing player's turn.
+    // If the current player is maximizing
     if (isMaximizing) {
-        int bestScore = -1000; // Initialize the best score to a very low value.
-        std::vector<Move> availableMoves = board.getAvailableMoves();
-        // Loop through each available move.
+        int bestScore = -1000; // Initialize the best score to a very low value
+        std::vector<Move> availableMoves = board.getAvailableMoves(); // Get all available moves for the current player
+        // Evaluate each available move recursively
         for (const auto &move : availableMoves) {
-            // Simulate the move for the current player.
-            board.placeMove(move.getRow(), move.getCol(), playerToSimulate);
-            // Recursively calculate the score for the next move.
-            int score = minMax(board, false, playerToSimulate);
-            // Undo the move to backtrack.
-            board.placeMove(move.getRow(), move.getCol(), EMPTY);
-            // Update the best score with the maximum value found.
-            bestScore = std::max(bestScore, score);
+            board.placeMove(move.getRow(), move.getCol(), playerToSimulate); // Place the move on the board
+            int score = minMax(board, false, playerToSimulate); // Recursively calculate the score
+            board.placeMove(move.getRow(), move.getCol(), EMPTY); // Undo the move
+            bestScore = std::max(bestScore, score); // Update the best score
         }
-        // Return the best score for the maximizing player.
-        return bestScore;
-    } else { // If it's the minimizing player's turn.
-        int bestScore = 1000; // Initialize the best score to a very high value.
-        std::vector<Move> availableMoves = board.getAvailableMoves();
-        // Loop through each available move.
+        return bestScore; // Return the best score found
+    } 
+    // If the current player is minimizing
+    else {
+        int bestScore = 1000; // Initialize the best score to a very high value
+        std::vector<Move> availableMoves = board.getAvailableMoves(); // Get all available moves for the opponent
+        // Evaluate each available move recursively
         for (const auto &move : availableMoves) {
-            // Simulate the move for the opponent.
-            board.placeMove(move.getRow(), move.getCol(), opponent);
-            // Recursively calculate the score for the next move.
-            int score = minMax(board, true, playerToSimulate);
-            // Undo the move to backtrack.
-            board.placeMove(move.getRow(), move.getCol(), EMPTY);
-            // Update the best score with the minimum value found.
-            bestScore = std::min(bestScore, score);
+            board.placeMove(move.getRow(), move.getCol(), opponent); // Place the move on the board
+            int score = minMax(board, true, playerToSimulate); // Recursively calculate the score
+            board.placeMove(move.getRow(), move.getCol(), EMPTY); // Undo the move
+            bestScore = std::min(bestScore, score); // Update the best score
         }
-        // Return the best score for the minimizing player.
-        return bestScore;
+        return bestScore; // Return the best score found
     }
 }
-
-/*
-
-
-// Minmax algorithm using alpha-beta pruning
-int Bot::minMax(Board &board, bool isMaximizing, char playerToSimulate, int alpha, int beta) {
-    char opponent = (playerToSimulate == PLAYER_X) ? PLAYER_O : PLAYER_X;
-
-    if (board.checkWin(playerToSimulate))
-        return (playerToSimulate == PLAYER_O) ? 10 : -10;
-    if (board.checkWin(opponent))
-        return (playerToSimulate == PLAYER_O) ? -10 : 10;
-    if (board.isFull())
-        return 0;
-
-    if (isMaximizing) {
-        int bestScore = -1000;
-        std::vector<Move> availableMoves = board.getAvailableMoves();
-        for (const auto &move : availableMoves) {
-            board.placeMove(move.getRow(), move.getCol(), playerToSimulate);
-            int score = minMax(board, false, playerToSimulate, alpha, beta);
-            board.placeMove(move.getRow(), move.getCol(), EMPTY);
-            bestScore = std::max(bestScore, score);
-            alpha = std::max(alpha, bestScore);
-            if (beta <= alpha)
-                break; // Beta cutoff
-        }
-        return bestScore;
-    } else {
-        int bestScore = 1000;
-        std::vector<Move> availableMoves = board.getAvailableMoves();
-        for (const auto &move : availableMoves) {
-            board.placeMove(move.getRow(), move.getCol(), opponent);
-            int score = minMax(board, true, playerToSimulate, alpha, beta);
-            board.placeMove(move.getRow(), move.getCol(), EMPTY);
-            bestScore = std::min(bestScore, score);
-            beta = std::min(beta, bestScore);
-            if (beta <= alpha)
-                break; // Alpha cutoff
-        }
-        return bestScore;
-    }
-}
-
-int score = minMax(board, false, playerToSimulate, -1000, 1000);
-
-*/

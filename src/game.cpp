@@ -18,36 +18,48 @@ void Game::setInterface(Interface interface) {
     interface = interface;
 }
 
+/**
+ * @brief Starts the game
+ */
 void Game::start() {
-    initNcurses();   // Initialize ncurses
-    runMainMenu();       // Run the menu
-    endNcurses();    // End ncurses
-    system("clear"); // Clear the terminal
+    initNcurses();
+    runMainMenu();
+    endNcurses();
+    system("clear");
 }
 
+/**
+ * @brief Initializes ncurses
+ */
 void Game::initNcurses() {
 
     setlocale(LC_ALL, "");
 
-    initscr();            // Initialize ncurse
-    raw();                // Disable line buffering
-    keypad(stdscr, TRUE); // Enable keypad for arrow keys
+    initscr();
+    raw();
+    keypad(stdscr, TRUE);
 
-    use_default_colors();          // Use default colors
-    start_color();                 // Start color mode
+    use_default_colors();
+    start_color();
 
     // -1 is the terminal default text or background color
 
-    init_pair(1, COLOR_GREEN, -1);   //  Define color pair 0 (green) - Text color
-    init_pair(2, COLOR_RED, -1);  // Define color pair 2 (red)
-    init_pair(3, COLOR_BLUE, -1); // Define color pair 2 (blue)
+    init_pair(1, COLOR_GREEN, -1);
+    init_pair(2, COLOR_RED, -1);
+    init_pair(3, COLOR_BLUE, -1);
 }
 
+/**
+ * @brief Ends ncurses
+ */
 void Game::endNcurses() {
     refresh();
-    endwin();  // End ncurses
+    endwin();
 }
 
+/**
+ * @brief Runs the main menu
+ */
 void Game::runMainMenu() {
 
     std::vector<std::string> options = {"Player vs Player", "Player vs Bot", "Credits", "Exit"};
@@ -70,6 +82,9 @@ void Game::runMainMenu() {
     }
 }
 
+/**
+ * @brief Runs the bot menu
+ */
 void Game::runBotMenu() {
 
     std::vector<std::string> options = {"Non-threaded", "Threaded", "Simulate games", "Back"};
@@ -93,8 +108,12 @@ void Game::runBotMenu() {
     }
 }
 
+/**
+ * @brief Runs the simulate games menu
+ */
 void Game::runSimulateGamesMenu() {
 
+    // Map to get the number of games from the option selected
     std::map<int, int> optionsMap = {
         {0, 5},
         {1, 10},
@@ -115,14 +134,17 @@ void Game::runSimulateGamesMenu() {
 
     refresh();
 
-    simulateGames(numberOfGames, 0);
-    simulateGames(numberOfGames, 1);
+    simulateGames(numberOfGames, 0); // Non-threaded
+    simulateGames(numberOfGames, 1); // Threaded
 
     flushinp(); // Flush input buffer
 
     interface.displayStats(); // Display stats
 }
 
+/**
+ * @brief Player vs player game
+ */
 void Game::playerVsPlayer() {
     Board board;
 
@@ -137,7 +159,7 @@ void Game::playerVsPlayer() {
         int row = position.getRow();
         int col = position.getCol();
 
-        if (board.isEmpty(row, col)) {
+        if (board.isEmpty(row, col)) { 
             board.placeMove(row, col, currentPlayer);
             currentPlayer = (currentPlayer == PLAYER_X) ? PLAYER_O : PLAYER_X;
         } else {
@@ -167,6 +189,10 @@ void Game::playerVsPlayer() {
 
 }
 
+/**
+ * @brief Player vs bot game
+ * @param mode 0 for non-threaded, 1 for threaded
+ */
 void Game::playerVsBot(int mode) {
 
     Board board;
@@ -201,14 +227,11 @@ void Game::playerVsBot(int mode) {
             
             interface.playingBoard(PLAYER_O, board, true);
 
-            // Sleep between 250 and 1000 milliseconds
-            std::this_thread::sleep_for(std::chrono::milliseconds(250 + (rand() % 750)));
-
-            auto start = std::chrono::high_resolution_clock::now();
+            auto start = std::chrono::high_resolution_clock::now(); // Start measuring time
             Move botMove = bot.getBestMove(board, PLAYER_O);
-            auto stop = std::chrono::high_resolution_clock::now();
+            auto stop = std::chrono::high_resolution_clock::now();  // Stop measuring time
 
-            auto duration = std::chrono::duration_cast<std::chrono::microseconds>(stop - start);
+            auto duration = std::chrono::duration_cast<std::chrono::microseconds>(stop - start); // Calculate duration
 
             executionTimes.push_back(std::make_pair(mode, duration.count()));
 
@@ -238,9 +261,13 @@ void Game::playerVsBot(int mode) {
     }
 
     interface.displayExecutionTimes(executionTimes);
-    saveExecutionTimes(executionTimes);
+    saveExecutionTimes(executionTimes); 
 }
 
+/**
+ * @brief Bot vs bot game
+ * @param mode 0 for non-threaded, 1 for threaded
+ */
 void Game::botVsBot(int mode){
     
         Board board;
@@ -260,9 +287,7 @@ void Game::botVsBot(int mode){
     
                 clear();
     
-                auto start = std::chrono::high_resolution_clock::now();
                 Move botMove = bot.getBestMove(board, PLAYER_X);
-                auto stop = std::chrono::high_resolution_clock::now();
     
                 board.placeMove(botMove.getRow(), botMove.getCol(), PLAYER_X);
                 currentPlayer = PLAYER_O;
@@ -270,11 +295,11 @@ void Game::botVsBot(int mode){
     
                 clear();
 
-                auto start = std::chrono::high_resolution_clock::now();
+                auto start = std::chrono::high_resolution_clock::now(); // Start measuring time
                 Move botMove = bot.getBestMove(board, PLAYER_O);
-                auto stop = std::chrono::high_resolution_clock::now();
+                auto stop = std::chrono::high_resolution_clock::now(); // Stop measuring time
                 
-                auto duration = std::chrono::duration_cast<std::chrono::microseconds>(stop - start);
+                auto duration = std::chrono::duration_cast<std::chrono::microseconds>(stop - start); // Calculate duration
 
                 executionTimes.push_back(std::make_pair(mode, duration.count()));
     
@@ -299,6 +324,8 @@ void Game::botVsBot(int mode){
 void Game::saveExecutionTimes(std::vector<std::pair<int, int>> executionTimes) {
     FileManager fileManager;
     std::vector<std::string> lines;
+
+    // Save execution times to a file
     for (const auto &[mode, time] : executionTimes) {
         std::string line = std::to_string(mode) + "," + std::to_string(time);
         lines.push_back(line);
@@ -306,6 +333,11 @@ void Game::saveExecutionTimes(std::vector<std::pair<int, int>> executionTimes) {
     fileManager.writeExecutionTimes("../executionTimes.csv", lines);
 }
 
+/**
+ * @brief Simulates games
+ * @param games Number of games to simulate
+ * @param mode 0 for non-threaded, 1 for threaded
+ */
 void Game::simulateGames(int games, int mode) {
     for (int i = 0; i < games; i++) {
         botVsBot(mode);

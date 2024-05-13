@@ -4,6 +4,9 @@ FileManager::FileManager() {}
 
 FileManager::~FileManager() {}
 
+/**
+ * @brief Reads execution times from a file and returns them as a vector of pairs. 
+ */
 std::vector<std::pair<int, int>> FileManager::readExecutionTimes(std::string fileName) {
 
     std::vector<std::string> lines;
@@ -11,6 +14,8 @@ std::vector<std::pair<int, int>> FileManager::readExecutionTimes(std::string fil
 
     try {
         std::ifstream file(fileName);
+
+        // Check if the file is open
         if (!file.is_open()) {
             return {};
         }
@@ -21,6 +26,7 @@ std::vector<std::pair<int, int>> FileManager::readExecutionTimes(std::string fil
         }
         file.close();
 
+        // Parse the lines and store them as pairs
         for (const std::string& line : lines) {
             std::string mode = line.substr(0, line.find(","));
             std::string time = line.substr(line.find(",") + 1);
@@ -34,6 +40,9 @@ std::vector<std::pair<int, int>> FileManager::readExecutionTimes(std::string fil
     }
 }
 
+/**
+ * @brief Writes execution times to a file.
+ */
 int FileManager::writeExecutionTimes(std::string fileName, std::vector<std::string> lines) {
     try {
         std::ofstream file(fileName, std::ios::app); // Open file in append mode
@@ -50,6 +59,9 @@ int FileManager::writeExecutionTimes(std::string fileName, std::vector<std::stri
     }
 }
 
+/**
+ * @brief Clears execution times from a file.
+ */
 void FileManager::clearExecutionTimes(std::string fileName) {
     try{
         // Clear the file by opening it in out mode
