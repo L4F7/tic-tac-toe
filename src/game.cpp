@@ -44,9 +44,9 @@ void Game::initNcurses() {
 
     // -1 is the terminal default text or background color
 
-    init_pair(1, COLOR_GREEN, -1);
-    init_pair(2, COLOR_RED, -1);
-    init_pair(3, COLOR_BLUE, -1);
+    init_pair(1, -1, -1);           // Default color
+    init_pair(2, COLOR_RED, -1);    // Red
+    init_pair(3, COLOR_BLUE, -1);   // Blue
 }
 
 /**
