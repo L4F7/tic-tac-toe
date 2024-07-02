@@ -74,7 +74,7 @@ void Interface::displaySimulating(){
 void Interface::displayGetBackToMenu() {
 
     attron(COLOR_PAIR(1)); 
-    printw("\n Press ANY KEY to go back to the menu...");
+    printw("\n                         Press ANY KEY to go back to the menu...");
     attroff(COLOR_PAIR(1));
 
     refresh();
@@ -92,10 +92,10 @@ void Interface::displayCredits() {
 
     attron(COLOR_PAIR(1)); 
 
-    printw("\n Developed by: \n\n");
-    printw("   - Luis Fuentes Fuentes\n");
-    printw("   - Andres Gonzalez Romero\n");
-    printw("   - Gerick Vargas Camacho\n");
+    printw("                         Developed by: \n\n");
+    printw("                            - Luis Fuentes Fuentes\n");
+    printw("                            - Andres Gonzalez Romero\n");
+    printw("                            - Gerick Vargas Camacho\n");
 
     attroff(COLOR_PAIR(1));
 
@@ -107,7 +107,7 @@ void Interface::displayCredits() {
  */
 void Interface::displayInvalidMove() {
     attron(COLOR_PAIR(1));
-    printw("\n             Invalid move! Try again");
+    printw("\n                                Invalid move! Try again");
     attroff(COLOR_PAIR(1));
     refresh();
     getch();
@@ -124,9 +124,9 @@ void Interface::displayWinMessage(char player) {
     int color = player == PLAYER_X ? 2 : 3; // Set color based on the player
 
     attron(COLOR_PAIR(color));
-    printw("\n                 ╔═════════════╗");
-    printw("\n                 ║Player %c wins║", player);
-    printw("\n                 ╚═════════════╝\n");
+    printw("\n                                    ╔═════════════╗");
+    printw("\n                                    ║Player %c wins║", player);
+    printw("\n                                    ╚═════════════╝\n");
     attroff(COLOR_PAIR(color));
 }
 
@@ -136,9 +136,9 @@ void Interface::displayWinMessage(char player) {
 void Interface::displayDrawMessage() {
     
     attron(COLOR_PAIR(1));
-    printw("\n                  ╔═══════════╗");
-    printw("\n                  ║It's a draw║");
-    printw("\n                  ╚═══════════╝\n");
+    printw("\n                                     ╔═══════════╗");
+    printw("\n                                     ║It's a draw║");
+    printw("\n                                     ╚═══════════╝\n");
     attroff(COLOR_PAIR(1));
 }
 
@@ -147,13 +147,13 @@ void Interface::displayDrawMessage() {
  */
 void Interface::displayExecutionTimes(std::vector<std::pair<int, int>> executionTimes) {
     attron(COLOR_PAIR(1));
-    printw("\n          ╔════════════════════════════╗");
-    printw("\n          ║Bot movement execution times║");
-    printw("\n          ╠════════════════════════════╣\n");
+    printw("\n                            ╔════════════════════════════╗");
+    printw("\n                            ║Bot movement execution times║");
+    printw("\n                            ╠════════════════════════════╣\n");
     for (const auto &[_, executionTimes] : executionTimes) {
-        printw("          ║%10d microseconds%5s║\n", executionTimes, "");
+        printw("                            ║%10d microseconds%5s║\n", executionTimes, "");
     }
-    printw("          ╚════════════════════════════╝\n");
+    printw("                            ╚════════════════════════════╝\n");
     attroff(COLOR_PAIR(1));
 }
 
@@ -286,27 +286,27 @@ void Interface::displayExecutionTimesBarChart(std::vector<std::pair<int, int>> a
 
     int midRounded = round((max - min) / rounder) * rounder;
 
-    printw("\n\n%9s", "");
+    printw("\n\n%25s", "");
     attron(A_UNDERLINE | A_BOLD);
     printw("Execution times bar chart (in microseconds)\n\n");
     attroff(A_UNDERLINE | A_BOLD);
 
-    printw("%15s │\n", "");
+    printw("%31s │\n", "");
     for (int i = maxRounded; i > 0; i -= rounder) {
         if (maxRounded == i) {
-            printw("%15d │-----┌──────┐--------------------\n", max);
+            printw("%16s%15d │-----┌──────┐--------------------\n", "", max);
         } else if (minRounded == i) {
-            printw("%15d │-----│░▒▓▓▒░│--------┌──────┐----\n", min);
+            printw("%16s%15d │-----│░▒▓▓▒░│--------┌──────┐----\n", "", min);
         } else if (min > i) {
-            printw("%15s │     │░▒▓▓▒░│        │░▒▓▓▒░│    \n", "");
+            printw("%31s │     │░▒▓▓▒░│        │░▒▓▓▒░│    \n", "");
         } else if (midRounded == i) {
-            printw("%15d │     │░▒▓▓▒░│                    \n", i);
+            printw("%16s%15d │     │░▒▓▓▒░│                    \n", "", i);
         } else {
-            printw("%15s │     │░▒▓▓▒░│                    \n", "");
+            printw("%31s │     │░▒▓▓▒░│                    \n", "");
         }
     }
-    printw("%15d └─────┴──────┴────────┴──────┴────\n", 0);
-    printw("%15s     Non-threaded      Threaded    \n", "");
+    printw("%16s%15d └─────┴──────┴────────┴──────┴────\n", "", 0);
+    printw("%31s     Non-threaded      Threaded    \n", "");
 
 }
 
@@ -325,15 +325,15 @@ int Interface::menu(std::vector<std::string> options, std::string menuMessage){
 
         attron(COLOR_PAIR(1)); 
 
-        printw("    %s\n\n", menuMessage.c_str());
+        printw("                         %s\n\n", menuMessage.c_str());
 
         for(int i = 0; i < numOptions; i++){
-            printw("      ");
+            printw("                           ");
             if( i == choice ){
+                attron(A_BOLD | A_BLINK);
                 printw("=> ");
-                attron(A_STANDOUT);
                 printw("%s\n", options.at(i).c_str());
-                attroff(A_STANDOUT);
+                attroff(A_BOLD | A_BLINK);
             } else {
                 printw("%s\n", options.at(i).c_str());
             }
@@ -389,7 +389,7 @@ Move Interface::playingBoard(char player, Board board, bool botTurn, bool gameOv
 
         if (!botTurn && !gameOver) {
             attron(COLOR_PAIR(1));
-            printw("    Use the arrow keys to navigate the board\n\n");
+            printw("                         Use the arrow keys to navigate the board\n\n");
             attroff(COLOR_PAIR(1));
         } 
 
@@ -401,7 +401,7 @@ Move Interface::playingBoard(char player, Board board, bool botTurn, bool gameOv
 
         if (gameOver) {
             attron(COLOR_PAIR(1));
-            printw("    Game over!\n\n");
+            printw("                                      Game over!\n\n");
             attroff(COLOR_PAIR(1));
         }
 
@@ -409,9 +409,9 @@ Move Interface::playingBoard(char player, Board board, bool botTurn, bool gameOv
         const char PLAYER_X = 'X';
         const char PLAYER_O = 'O';
 
-        const std::string boardTop = "               ╔═════╦═════╦═════╗\n";
-        const std::string boardBottom = "               ╚═════╩═════╩═════╝\n";
-        const std::string boardMiddle = "               ╠═════╬═════╬═════╣\n";
+        const std::string boardTop = "                                  ╔═════╦═════╦═════╗\n";
+        const std::string boardBottom = "                                  ╚═════╩═════╩═════╝\n";
+        const std::string boardMiddle = "                                  ╠═════╬═════╬═════╣\n";
         const std::string emptyCell = "   ";
 
         // Map to store the representation of each cell in the board
@@ -422,7 +422,7 @@ Move Interface::playingBoard(char player, Board board, bool botTurn, bool gameOv
         };
 
         attron(COLOR_PAIR(1));
-        printw("\n\n                 Player %c's turn\n\n", player);
+        printw("\n                                    Player %c's turn\n\n", player);
         attroff(COLOR_PAIR(1));
 
         for (int i = 0; i < 13; i++) {
@@ -445,7 +445,7 @@ Move Interface::playingBoard(char player, Board board, bool botTurn, bool gameOv
 
                     if (j == 0) { // Left border
                         attron(COLOR_PAIR(1));
-                        printw("               ║ ");
+                        printw("                                  ║ ");
                         attroff(COLOR_PAIR(1));
                     } else if (j == 6) { // Right border
                         attron(COLOR_PAIR(1)); 
